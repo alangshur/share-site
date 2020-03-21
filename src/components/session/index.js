@@ -1,11 +1,20 @@
 import React from 'react';
 
-const SessionContext = React.createContext({});
+const SessionContext = React.createContext({
+    user: null,
+    fetching: true,
+    initFetch: false
+});
 
 const withSession = Component => props => (
     <SessionContext.Consumer>
         {session => 
-            <Component />
+            <Component 
+                {...props} 
+                user={session.user}
+                fetching={session.fetching}
+                initFetch={session.initFetch}
+            />
         }
     </SessionContext.Consumer>
 );
