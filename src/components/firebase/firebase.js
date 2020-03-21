@@ -40,6 +40,19 @@ class Firebase {
     getUser = () => {
         return this.auth.currentUser;
     }
+
+
+
+    /*** MATCHING API ***/
+
+    getMatching = () => {
+        const matchingRef = this.db.collection('matching').doc('0');
+        return matchingRef.get().then(matching => {
+            if (matching.exists) return matching.data();
+            else return null;
+        });
+    }
 }
+
 
 export default Firebase;
