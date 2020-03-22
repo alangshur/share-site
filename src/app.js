@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import HomePage from './components/home';
+import RulesPage from './components/rules';
 import { SessionContext } from './components/session';
 import { withFirebase } from './components/firebase';
 
@@ -39,6 +40,7 @@ class App extends Component {
                 <BrowserRouter>
                     <Switch>
                         <Route path='/' component={HomePage} />
+                        <Route path='/rules' component={RulesPage} />
                     </Switch>
                 </BrowserRouter>
             </SessionContext.Provider>

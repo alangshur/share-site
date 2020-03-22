@@ -66,7 +66,7 @@ class AuthHomeDisplay extends Component {
                             width: '14px',
 
                             borderRadius: '50%',
-                            backgroundColor: '#0066ff'
+                            backgroundColor: '#0066cc'
                         }}
                     />
 
@@ -208,6 +208,9 @@ class AuthHomeDisplay extends Component {
                     userCount: matching.userCount,
                     timeLeft: matching.deadline.toMillis() - Date.now(),
                 });
+            }
+            else if (this.timeout !== null) {
+                this.props.setError('Error: Failed to fetch data for next matching.');
             }
         });
     }

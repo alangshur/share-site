@@ -116,6 +116,9 @@ class NoAuthHomeDisplay extends Component {
                     timeLeft: matching.deadline.toMillis() - Date.now(),
                 });
             }
+            else if (this.timeout !== null) {
+                this.props.setError('Error: Failed to fetch data for next matching.');
+            }
         });
     }
 
