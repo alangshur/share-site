@@ -28,8 +28,8 @@ class LoadingSpinner extends Component {
                 <Loader
                     type='Oval'
                     color='grey'
-                    height={150}
-                    width={150}
+                    height={250}
+                    width={250}
                 />
             </div>
         );

@@ -18,8 +18,8 @@ class NoAuthHomeDisplay extends Component {
     }
 
     componentWillUnmount() {
-        this.listener && clearTimeout(this.listener);
-        this.listener = null;
+        this.timeout && clearTimeout(this.timeout);
+        this.timeout = null;
     }
 
     render() {
@@ -34,7 +34,9 @@ class NoAuthHomeDisplay extends Component {
                     top: 0,
                     left: 0,
                     height: '100%',
-                    width: '100%'
+                    width: '100%',
+
+                    color: '#36454F'
                 }}
             >
 
@@ -46,10 +48,9 @@ class NoAuthHomeDisplay extends Component {
                         justifyContent: 'center',
                         alignItems: 'center',
 
-                        width: '325px',
-                        height: '200px',
+                        width: '300px',
+                        height: '250px',
 
-                        color: '#36454F',
                         borderRadius: '5px',
                         backgroundColor: '#f2f2f2',
                         boxShadow: '0 7px 14px 0 rgba(60, 66, 87, 0.12), 0 3px 6px 0 rgba(0, 0, 0, 0.12)'
@@ -62,7 +63,7 @@ class NoAuthHomeDisplay extends Component {
                         size='sm'
                         variant='outline-dark'
                         style={{
-                            width: '175px'
+                            width: '200px'
                         }}
                     >
                         Join with Google
@@ -71,7 +72,7 @@ class NoAuthHomeDisplay extends Component {
                     {/* next matching count */}
                     <div
                         style={{
-                            marginTop: '40px',
+                            marginTop: '80px',
                             fontSize: '14px'
                         }}
                     >
@@ -93,7 +94,7 @@ class NoAuthHomeDisplay extends Component {
                         }}
                     >
 
-                        Time Left to Join:&nbsp;
+                        Time to Join:&nbsp;
                         <b>
                             {this.state.timeLeft ?
                                 formatTimeFromMs(this.state.timeLeft) :
@@ -108,8 +109,8 @@ class NoAuthHomeDisplay extends Component {
 
     _fetchCurrentMatching = () => {
         this.props.firebase.getMatching().then(matching => {
-            if (matching && this.listener) {
-                this.listener = setTimeout(this._updateTimeLeft, 1000);
+            if (matching && (this.timeout !== null)) {
+                this.timeout = setTimeout(this._updateTimeLeft, 1000);
                 this.setState({
                     userCount: matching.userCount,
                     timeLeft: matching.deadline.toMillis() - Date.now(),
@@ -119,7 +120,7 @@ class NoAuthHomeDisplay extends Component {
     }
 
     _updateTimeLeft = () => {
-        this.listener = setTimeout(this._updateTimeLeft, 1000);
+        this.timeout = setTimeout(this._updateTimeLeft, 1000);
         this.setState({ timeLeft: this.state.timeLeft - 1000 });
     }
 }
