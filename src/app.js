@@ -30,7 +30,7 @@ class App extends Component {
 
     componentWillUnmount() {
         this.listener && this.listener();
-        this.listener = undefined;
+        this.listener = null;
     }
 
     render() {

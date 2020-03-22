@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 
 import { withFirebase } from '../firebase';
+import { formatTimeFromMs } from '../../util';
 
 class NoAuthHomeDisplay extends Component {
     constructor(props) {
         super(props);
         this.state = {
             userCount: null,
-            timeLeft: null,
-            timeLeftListener: null
+            timeLeft: null
         }
     }
 
@@ -18,8 +18,8 @@ class NoAuthHomeDisplay extends Component {
     }
 
     componentWillUnmount() {
-        if (this.state.timeLeftListener) 
-            clearTimeout(this.state.timeLeftListener);
+        this.listener && clearTimeout(this.listener);
+        this.listener = null;
     }
 
     render() {
@@ -50,6 +50,7 @@ class NoAuthHomeDisplay extends Component {
                         height: '200px',
 
                         color: '#36454F',
+                        borderRadius: '5px',
                         backgroundColor: '#f2f2f2',
                         boxShadow: '0 7px 14px 0 rgba(60, 66, 87, 0.12), 0 3px 6px 0 rgba(0, 0, 0, 0.12)'
                     }}
@@ -58,9 +59,10 @@ class NoAuthHomeDisplay extends Component {
                     {/* join button */}
                     <Button
                         onClick={this.props.firebase.doSignIn}
+                        size='sm'
                         variant='outline-dark'
                         style={{
-                            width: '225px'
+                            width: '175px'
                         }}
                     >
                         Join with Google
@@ -73,7 +75,14 @@ class NoAuthHomeDisplay extends Component {
                             fontSize: '14px'
                         }}
                     >
-                        People In Next Matching: <b>{this.state.userCount}</b>
+                        
+                        People In Next Matching:&nbsp;
+                        <b>
+                            {this.state.userCount ?
+                                this.state.userCount.toLocaleString() :
+                                '--'
+                            }
+                        </b>
                     </div>
 
                     {/* time left to next matching */}
@@ -84,7 +93,13 @@ class NoAuthHomeDisplay extends Component {
                         }}
                     >
 
-                        Time Left to Join: <b>{this.state.timeLeft}</b>
+                        Time Left to Join:&nbsp;
+                        <b>
+                            {this.state.timeLeft ?
+                                formatTimeFromMs(this.state.timeLeft) :
+                                '--'
+                            }
+                        </b>
                     </div>
                 </div>
             </div>
@@ -93,21 +108,19 @@ class NoAuthHomeDisplay extends Component {
 
     _fetchCurrentMatching = () => {
         this.props.firebase.getMatching().then(matching => {
-            if (matching) {
+            if (matching && this.listener) {
+                this.listener = setTimeout(this._updateTimeLeft, 1000);
                 this.setState({
                     userCount: matching.userCount,
-                    timeLeft: matching.deadline.toMillis() - Date.now()
-                }, this._updateTimeLeft);
+                    timeLeft: matching.deadline.toMillis() - Date.now(),
+                });
             }
         });
     }
 
     _updateTimeLeft = () => {
-        this.setState({
-            timeLeft: this.state.timeLeft - 1000
-        }, () => {
-            setTimeout(this._updateTimeLeft, 1000);
-        });
+        this.listener = setTimeout(this._updateTimeLeft, 1000);
+        this.setState({ timeLeft: this.state.timeLeft - 1000 });
     }
 }
 

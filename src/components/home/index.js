@@ -18,7 +18,7 @@ class HomePage extends Component {
                     userSelect: 'none',
                     msUserSelect: 'none',
                     KhtmlUserSelect: 'none',
-                    MozUserSelect: 'none',
+                    MozUserSelect: 'none'
                 }}
             >
                 
