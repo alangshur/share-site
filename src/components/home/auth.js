@@ -48,7 +48,7 @@ class AuthHomeDisplay extends Component {
                 {/* matching button */}
                 <Button
                     disabled={this.state.algorithmRunning}
-                    variant='dark'
+                    variant='outline-dark'
                     style={{
                         position: 'relative',
                         display: 'flex',
@@ -56,11 +56,11 @@ class AuthHomeDisplay extends Component {
                         justifyContent: 'center',
                         alignItems: 'center',
 
-                        height: '41px',
+                        height: '40px',
                         width: '360px',
                         marginBottom: '35px',
                         
-                        fontSize: '14px'
+                        fontSize: '14px',
                     }}
                 >
 
@@ -86,14 +86,14 @@ class AuthHomeDisplay extends Component {
                             <div>&nbsp;{this.state.algorithmMinutesLeft} minutes left...</div>
                         </> :
                         <>
-                            <div>Go to Your Match Group</div>
+                            <div>Go to Current Match</div>
 
                             {/* button arrow */}
                             <div    
                                 style={{
                                     position: 'absolute',
 
-                                    top: '5px',
+                                    top: '4px',
                                     right: '12px',
                                     height: '14px',
                                     width: '14px',
@@ -131,7 +131,7 @@ class AuthHomeDisplay extends Component {
                     <Button
                         onClick={() => this.props.history.push('/survey')}
                         size='sm'
-                        variant='outline-dark'
+                        variant='secondary'
                         style={{
                             width: '210px'
                         }}
@@ -195,7 +195,7 @@ class AuthHomeDisplay extends Component {
                     {/* rules button */}
                     <Button
                         onClick={() => { this.props.history.push('/rules'); }}
-                        variant='outline-dark'
+                        variant='secondary'
                         size='sm'
                         style={{
                             width: '210px'
@@ -207,7 +207,7 @@ class AuthHomeDisplay extends Component {
                     {/* sign out button */}
                     <Button
                         onClick={this.props.firebase.doSignOut}
-                        variant='outline-dark'
+                        variant='secondary'
                         size='sm'
                         style={{
                             width: '210px',

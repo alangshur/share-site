@@ -84,7 +84,7 @@ class RulesPage extends Component {
                     <Button
                         onClick={() => this.props.history.push('/')}
                         size='sm'
-                        variant='outline-dark'
+                        variant='secondary'
                         style={{
                             alignSelf: 'center',
                             width: '210px',

@@ -61,7 +61,7 @@ class NoAuthHomeDisplay extends Component {
                     <Button
                         onClick={this.props.firebase.doSignIn}
                         size='sm'
-                        variant='outline-dark'
+                        variant='secondary'
                         style={{
                             width: '210px'
                         }}

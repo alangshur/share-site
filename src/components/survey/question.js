@@ -20,13 +20,13 @@ class SurveyQuestion extends Component {
                     flexDirection: 'column',
 
                     width: '300px',
-                    marginBottom: '100px'
+                    marginBottom: '150px',
                 }}
             >
                 <div 
                     style={{ 
                         width: '350px', 
-                        marginBottom: '30px', 
+                        marginBottom: '20px', 
                         fontStyle: this.state.edited ? '' : 'italic' 
                     }}
                 >

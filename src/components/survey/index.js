@@ -20,7 +20,6 @@ class SurveyPage extends Component {
                 style={{
                     position: 'absolute',
                     display: 'flex',
-                    justifyContent: 'center',
                     alignItems: 'center',
                     flexDirection: 'column',
 
@@ -28,6 +27,8 @@ class SurveyPage extends Component {
                     left: 0,
                     height: '100%',
                     width: '100%',
+                    paddingTop: '50px',
+                    paddingBottom: '50px',
 
                     color: '#36454F',
                     userSelect: 'none',
@@ -38,6 +39,24 @@ class SurveyPage extends Component {
                 }}
             >
 
+                {/* title */}
+                <div
+                    style={{
+                        display: 'flex',
+                        alignContent: 'center',
+
+                        width: '300px',
+                        marginBottom: '70px',
+                        
+                        fontSize: '20px',
+                        fontWeight: 'bold',
+                        textAlign: 'center'
+                    }}
+                >
+                    Answer Each Question & Submit at Bottom
+                </div>
+
+                {/* survey questions */}
                 <SurveyQuestion
                     num={0}
                     prompt={'Do you plan on raising your chidlren as religious?'}
@@ -45,6 +64,30 @@ class SurveyPage extends Component {
                     tenPrompt={'Orthodox all the way!'}
                     update={this._updateResponseValue}
                 />
+
+                <SurveyQuestion
+                    num={1}
+                    prompt={'Do you plan on raising your chidlren as religious?'}
+                    zeroPrompt={'They can decide for themselves.'}
+                    tenPrompt={'Orthodox all the way!'}
+                    update={this._updateResponseValue}
+                />
+
+                <SurveyQuestion
+                    num={2}
+                    prompt={'Do you plan on raising your chidlren as religious?'}
+                    zeroPrompt={'They can decide for themselves.'}
+                    tenPrompt={'Orthodox all the way!'}
+                    update={this._updateResponseValue}
+                />  
+
+                <SurveyQuestion
+                    num={3}
+                    prompt={'Do you plan on raising your chidlren as religious?'}
+                    zeroPrompt={'They can decide for themselves.'}
+                    tenPrompt={'Orthodox all the way!'}
+                    update={this._updateResponseValue}
+                />   
 
                 {/* error text */}
                 {this.state.error &&
@@ -64,7 +107,7 @@ class SurveyPage extends Component {
                 {/* submit button */}
                 <Button
                     size='sm'
-                    variant='outline-dark'
+                    variant='secondary'
                     style={{
                         width: '210px',
                         marginBottom: '15px'
@@ -77,7 +120,7 @@ class SurveyPage extends Component {
                 <Button
                     onClick={() => this.props.history.push('/')}
                     size='sm'
-                    variant='outline-dark'
+                    variant='secondary'
                     style={{
                         width: '210px'
                     }}
