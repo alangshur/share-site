@@ -6,6 +6,7 @@ class SurveyQuestion extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            value: props.initValue,
             edited: false
         }
     }
@@ -35,6 +36,7 @@ class SurveyQuestion extends Component {
                 </div>
 
                 <Slider
+                    value={this.state.value}
                     onChange={this._onChange}
                     min={0}
                     max={10}
@@ -53,8 +55,7 @@ class SurveyQuestion extends Component {
     }
 
     _onChange = val => {
-        console.log('true')
-        this.setState({ edited: true });
+        this.setState({ edited: true, value: val });
         this.props.update(this.props.num, val);
     }
 }

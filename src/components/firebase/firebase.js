@@ -16,6 +16,8 @@ var config = {
     measurementId: "G-DWPPGQRHSK"
 };
 
+const FUNCTIONS_URL = 'https://us-central1-share-site-8ee1b.cloudfunctions.net/';
+
 class Firebase {
     constructor() {
         app.initializeApp(config);
@@ -45,9 +47,9 @@ class Firebase {
 
 
 
-    /*** MATCHING API ***/
+    /*** USER API ***/
 
-    getUserMatchingData = () => {
+    getUserData = () => {
         const id = this.getUser().uid;
         const userRef = this.db.collection('users').doc(id);
         return userRef.get().then(user => {
@@ -55,6 +57,10 @@ class Firebase {
             else return null;
         });
     }
+
+
+
+    /*** MATCHING API ***/
 
     getNextMatching = () => {
         const date = getNextMatchingDate();
@@ -76,10 +82,19 @@ class Firebase {
 
 
 
-    /*** QUESTIONS API ***/
+    /*** SURVEY API ***/
 
-    updateSurveyResponses = () => {
-        
+    updateSurveyAnswers = survey => {
+        return this.getUser().getIdToken().then(token => {
+            return fetch(FUNCTIONS_URL + 'updateSurvey', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': token,
+                    'Survey': survey,
+                }
+            }).then(res => res.json());
+        });
     }
 }
 

@@ -154,7 +154,7 @@ class AuthHomeDisplay extends Component {
                             width: '210px'
                         }}
                     >
-                        Join Next Matching
+                        {this.state.hasNextMatch ? 'Edit Your Answers' : 'Join Next Matching'}
                     </Button>
 
                     {/* next matching count */}
@@ -258,7 +258,7 @@ class AuthHomeDisplay extends Component {
     }
 
     _fetchUserMatchingData = () => {
-        return this.props.firebase.getUserMatchingData().then(user => {
+        return this.props.firebase.getUserData().then(user => {
             if (user && (this.timeout !== null)) {
                 const next = getNextMatchingDate();
                 const current = getCurrentMatchingDate();
