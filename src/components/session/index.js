@@ -3,7 +3,8 @@ import React from 'react';
 const SessionContext = React.createContext({
     user: null,
     fetching: true,
-    initFetch: false
+    initFetch: false,
+    setFetching: () => {}
 });
 
 const withSession = Component => props => (
@@ -14,6 +15,7 @@ const withSession = Component => props => (
                 user={session.user}
                 fetching={session.fetching}
                 initFetch={session.initFetch}
+                setFetching={session.setFetching}
             />
         }
     </SessionContext.Consumer>

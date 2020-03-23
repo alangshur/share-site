@@ -14,7 +14,7 @@ class NoAuthHomeDisplay extends Component {
     }
 
     componentDidMount() {
-        this._fetchCurrentMatching();
+        this._fetchNextMatching();
     }
 
     componentWillUnmount() {
@@ -48,8 +48,8 @@ class NoAuthHomeDisplay extends Component {
                         justifyContent: 'center',
                         alignItems: 'center',
 
-                        width: '300px',
-                        height: '250px',
+                        width: '325px',
+                        height: '170px',
 
                         borderRadius: '5px',
                         backgroundColor: '#f2f2f2',
@@ -63,7 +63,7 @@ class NoAuthHomeDisplay extends Component {
                         size='sm'
                         variant='outline-dark'
                         style={{
-                            width: '200px'
+                            width: '210px'
                         }}
                     >
                         Join with Google
@@ -72,7 +72,7 @@ class NoAuthHomeDisplay extends Component {
                     {/* next matching count */}
                     <div
                         style={{
-                            marginTop: '80px',
+                            marginTop: '40px',
                             fontSize: '14px'
                         }}
                     >
@@ -107,8 +107,8 @@ class NoAuthHomeDisplay extends Component {
         );
     }
 
-    _fetchCurrentMatching = () => {
-        this.props.firebase.getMatching().then(matching => {
+    _fetchNextMatching = () => {
+        this.props.firebase.getNextMatching().then(matching => {
             if (matching && (this.timeout !== null)) {
                 this.timeout = setTimeout(this._updateTimeLeft, 1000);
                 this.setState({

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
+import Loader from 'react-loader-spinner';
 
 import { withFirebase } from '../firebase';
 import { formatTimeFromMs } from '../../util';
@@ -9,12 +11,14 @@ class AuthHomeDisplay extends Component {
         super(props);
         this.state = {
             userCount: null,
-            timeLeft: null
+            timeLeft: null,
+            algorithmRunning: false,
+            algorithmMinutesLeft: 0,
         }
     }
 
     componentDidMount() {
-        this._fetchCurrentMatching();
+        this._fetchNextMatching();
     }
 
     componentWillUnmount() {
@@ -43,50 +47,65 @@ class AuthHomeDisplay extends Component {
 
                 {/* matching button */}
                 <Button
-                    variant='outline-dark'
+                    disabled={this.state.algorithmRunning}
+                    variant='dark'
                     style={{
                         position: 'relative',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'center',
+                        alignItems: 'center',
 
                         height: '41px',
-                        width: '300px',
+                        width: '360px',
                         marginBottom: '35px',
                         
                         fontSize: '14px'
                     }}
                 >
 
-                    {/* notification notice */}
-                    <div    
-                        style={{
-                            position: 'absolute',
+                    {this.state.algorithmRunning ?
+                        <>
 
-                            top: '13px',
-                            left: '12px',
-                            height: '14px',
-                            width: '14px',
+                            {/* match compute spinner */}
+                            <Loader
+                                type='Oval'
+                                color='black'
+                                height={25}
+                                width={25}
+                                style={{ 
+                                    position: 'absolute',
 
-                            borderRadius: '50%',
-                            backgroundColor: '#0066cc'
-                        }}
-                    />
+                                    top: '6px',
+                                    left: '9px',
+                                    marginRight: '50px' 
+                                }}
+                            />
 
-                    Go To Your Matching
+                            <div>Computing matches: </div>
+                            <div>&nbsp;{this.state.algorithmMinutesLeft} minutes left...</div>
+                        </> :
+                        <>
+                            <div>Go to Your Match Group</div>
 
-                    {/* button arrow */}
-                    <div    
-                        style={{
-                            position: 'absolute',
+                            {/* button arrow */}
+                            <div    
+                                style={{
+                                    position: 'absolute',
 
-                            top: '5px',
-                            right: '12px',
-                            height: '14px',
-                            width: '14px',
+                                    top: '5px',
+                                    right: '12px',
+                                    height: '14px',
+                                    width: '14px',
 
-                            fontSize: '18px'
-                        }}
-                    >
-                        >
-                    </div>
+                                    fontSize: '18px'
+                                }}
+                            >
+                                >
+                            </div>
+                        </> 
+                    }
+
                 </Button>
 
                 {/* top console */}
@@ -97,8 +116,8 @@ class AuthHomeDisplay extends Component {
                         alignItems: 'center',
                         justifyContent: 'center',
 
-                        width: '300px',
-                        height: '250px',
+                        width: '360px',
+                        height: '170px',
                         marginBottom: '35px',
 
                         color: '#36454F',
@@ -110,10 +129,11 @@ class AuthHomeDisplay extends Component {
 
                     {/* join button */}
                     <Button
+                        onClick={() => this.props.history.push('/survey')}
                         size='sm'
                         variant='outline-dark'
                         style={{
-                            width: '200px'
+                            width: '210px'
                         }}
                     >
                         Join Next Matching
@@ -122,7 +142,7 @@ class AuthHomeDisplay extends Component {
                     {/* next matching count */}
                     <div
                         style={{
-                            marginTop: '80px',
+                            marginTop: '40px',
                             fontSize: '14px'
                         }}
                     >
@@ -162,8 +182,8 @@ class AuthHomeDisplay extends Component {
                         alignItems: 'center',
                         justifyContent: 'center',
 
-                        width: '300px',
-                        height: '150px',
+                        width: '360px',
+                        height: '130px',
 
                         color: '#36454F',
                         borderRadius: '5px',
@@ -174,10 +194,11 @@ class AuthHomeDisplay extends Component {
 
                     {/* rules button */}
                     <Button
+                        onClick={() => { this.props.history.push('/rules'); }}
                         variant='outline-dark'
                         size='sm'
                         style={{
-                            width: '200px'
+                            width: '210px'
                         }}
                     >
                         How does this work?
@@ -189,7 +210,7 @@ class AuthHomeDisplay extends Component {
                         variant='outline-dark'
                         size='sm'
                         style={{
-                            width: '200px',
+                            width: '210px',
                             marginTop: '25px'
                         }}
                     >
@@ -200,8 +221,8 @@ class AuthHomeDisplay extends Component {
         );
     }
 
-    _fetchCurrentMatching = () => {
-        this.props.firebase.getMatching().then(matching => {
+    _fetchNextMatching = () => {
+        this.props.firebase.getNextMatching().then(matching => {
             if (matching && (this.timeout !== null)) {
                 this.timeout = setTimeout(this._updateTimeLeft, 1000);
                 this.setState({
@@ -221,4 +242,4 @@ class AuthHomeDisplay extends Component {
     }
 }
 
-export default withFirebase(AuthHomeDisplay);
+export default withRouter(withFirebase(AuthHomeDisplay));

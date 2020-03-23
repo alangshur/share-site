@@ -3,7 +3,7 @@ import { Alert } from 'react-bootstrap';
 
 import AuthHomeDisplay from './auth';
 import NoAuthHomeDisplay from './noauth';
-import LoadingSpinner from './loader';
+import LoadingSpinner from './../../loader';
 import { withSession } from '../session';
 
 class HomePage extends Component {
@@ -75,7 +75,7 @@ class HomePage extends Component {
         this.setState({ error: error }, () => {
             this.timeout = setTimeout(() => {
                 this.setState({ error: '' });
-            }, 5000);
+            }, 10000);
         });
     }
 }

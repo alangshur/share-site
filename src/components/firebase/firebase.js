@@ -3,6 +3,8 @@ import 'firebase/analytics';
 import 'firebase/firestore';
 import 'firebase/auth';
 
+import { getNextMatchingDate, getCurrentMatchingDate } from '../../util';
+
 var config = {
     apiKey: "AIzaSyCVnih4H1x59l15DFh6Hi3DGqjatdVdhHE",
     authDomain: "share-site-8ee1b.firebaseapp.com",
@@ -45,12 +47,30 @@ class Firebase {
 
     /*** MATCHING API ***/
 
-    getMatching = () => {
-        const matchingRef = this.db.collection('matching').doc('0');
+    getNextMatching = () => {
+        const date = getNextMatchingDate();
+        const matchingRef = this.db.collection('matchings').doc(date);
         return matchingRef.get().then(matching => {
             if (matching.exists) return matching.data();
             else return null;
         });
+    }
+
+    getCurrentMatching = () => {
+        const date = getCurrentMatchingDate();
+        const matchingRef = this.db.collection('matchings').doc(date);
+        return matchingRef.get().then(matching => {
+            if (matching.exists) return matching.data();
+            else return null;
+        });
+    }
+
+
+
+    /*** QUESTIONS API ***/
+
+    updateSurveyResponses = () => {
+        
     }
 }
 
