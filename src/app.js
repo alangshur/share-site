@@ -13,8 +13,7 @@ class App extends Component {
         super(props);
         this.state = {
             user: null,
-            fetching: true,
-            initFetch: false,
+            fetching: 1,
             setFetching: this._setFetching
         };
     }
@@ -24,7 +23,7 @@ class App extends Component {
             user => {
                 this.setState({
                     user: user,
-                    fetching: false,
+                    fetching: this.state.fetching - 1,
                     initFetch: true
                 });
             }
@@ -51,7 +50,8 @@ class App extends Component {
     }
 
     _setFetching = state => {
-        this.setState({ fetching: state });
+        if (state) this.setState({ fetching: this.state.fetching + 1 });
+        else this.setState({ fetching: this.state.fetching - 1 });
     }
 }
 

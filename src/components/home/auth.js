@@ -3,8 +3,13 @@ import { Button } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
 
+import { withSession } from '../session';
 import { withFirebase } from '../firebase';
-import { formatTimeFromMs } from '../../util';
+import { 
+    formatTimeFromMs, 
+    getNextMatchingDate, 
+    getCurrentMatchingDate 
+} from '../../util';
 
 class AuthHomeDisplay extends Component {
     constructor(props) {
@@ -12,18 +17,29 @@ class AuthHomeDisplay extends Component {
         this.state = {
             userCount: null,
             timeLeft: null,
-            algorithmRunning: false,
-            algorithmMinutesLeft: 0,
+            hasCurrentMatch: false,
+            hasNextMatch: false,
+            algorithmRunning: false
         }
     }
 
     componentDidMount() {
-        this._fetchNextMatching();
+        this.props.setFetching(true);
+        this._fetchNextMatching()
+            .then(this._fetchUserData)
+            .then(() => { this.props.setFetching(false); })
+            .catch(err => { 
+                this.props.setFetching(false);
+                this.props.setError('Error: Failed to contact servers.'); 
+            });
     }
 
     componentWillUnmount() {
         this.timeout && clearTimeout(this.timeout);
         this.timeout = null;
+
+        this.timeout2 && clearTimeout(this.timeout2);
+        this.timeout2 = null;
     }
 
     render() {
@@ -46,67 +62,69 @@ class AuthHomeDisplay extends Component {
             >
 
                 {/* matching button */}
-                <Button
-                    disabled={this.state.algorithmRunning}
-                    variant='outline-dark'
-                    style={{
-                        position: 'relative',
-                        display: 'flex',
-                        flexDirection: 'row',
-                        justifyContent: 'center',
-                        alignItems: 'center',
+                {this.state.hasCurrentMatch &&
+                    <Button
+                        disabled={this.state.algorithmRunning}
+                        variant='outline-dark'
+                        style={{
+                            position: 'relative',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            alignItems: 'center',
 
-                        height: '40px',
-                        width: '360px',
-                        marginBottom: '35px',
-                        
-                        fontSize: '14px',
-                    }}
-                >
+                            height: '40px',
+                            width: '360px',
+                            marginBottom: '35px',
+                            
+                            fontSize: '14px',
+                        }}
+                    >
 
-                    {this.state.algorithmRunning ?
-                        <>
+                        {this.state.algorithmRunning ?
+                            <>
 
-                            {/* match compute spinner */}
-                            <Loader
-                                type='Oval'
-                                color='black'
-                                height={25}
-                                width={25}
-                                style={{ 
-                                    position: 'absolute',
+                                {/* match compute spinner */}
+                                <Loader
+                                    type='Oval'
+                                    color='black'
+                                    height={25}
+                                    width={25}
+                                    style={{ 
+                                        position: 'absolute',
 
-                                    top: '6px',
-                                    left: '9px',
-                                    marginRight: '50px' 
-                                }}
-                            />
+                                        top: '6px',
+                                        left: '9px',
+                                        marginRight: '50px' 
+                                    }}
+                                />
 
-                            <div>Computing matches: </div>
-                            <div>&nbsp;{this.state.algorithmMinutesLeft} minutes left...</div>
-                        </> :
-                        <>
-                            <div>Go to Current Match</div>
+                                <div>Computing matches... Check back soon!</div>
+                            </> :
 
-                            {/* button arrow */}
-                            <div    
-                                style={{
-                                    position: 'absolute',
+                            <>
+                                <div>Go to Current Match</div>
 
-                                    top: '4px',
-                                    right: '12px',
-                                    height: '14px',
-                                    width: '14px',
+                                {/* button arrow */}
+                                <div    
+                                    style={{
+                                        position: 'absolute',
 
-                                    fontSize: '18px'
-                                }}
-                            >
+                                        top: '4px',
+                                        right: '12px',
+                                        height: '14px',
+                                        width: '14px',
+
+                                        fontSize: '18px'
+                                    }}
                                 >
-                            </div>
-                        </> 
-                    }
+                                    >
+                                </div>
+                            </>
+                        }
 
-                </Button>
+                    </Button>
+                }
 
                 {/* top console */}
                 <div
@@ -117,7 +135,7 @@ class AuthHomeDisplay extends Component {
                         justifyContent: 'center',
 
                         width: '360px',
-                        height: '170px',
+                        height: '190px',
                         marginBottom: '35px',
 
                         color: '#36454F',
@@ -183,7 +201,7 @@ class AuthHomeDisplay extends Component {
                         justifyContent: 'center',
 
                         width: '360px',
-                        height: '130px',
+                        height: '170px',
 
                         color: '#36454F',
                         borderRadius: '5px',
@@ -211,7 +229,7 @@ class AuthHomeDisplay extends Component {
                         size='sm'
                         style={{
                             width: '210px',
-                            marginTop: '25px'
+                            marginTop: '35px'
                         }}
                     >
                         Sign Out
@@ -222,12 +240,15 @@ class AuthHomeDisplay extends Component {
     }
 
     _fetchNextMatching = () => {
-        this.props.firebase.getNextMatching().then(matching => {
+        return this.props.firebase.getNextMatching().then(matching => {
             if (matching && (this.timeout !== null)) {
+                const timeLeft = matching.deadline.toMillis() - Date.now();
+
                 this.timeout = setTimeout(this._updateTimeLeft, 1000);
+                this.timeout2 = setTimeout(window.location.reload.bind(window.location), timeLeft);
                 this.setState({
                     userCount: matching.userCount,
-                    timeLeft: matching.deadline.toMillis() - Date.now(),
+                    timeLeft: timeLeft
                 });
             }
             else if (this.timeout !== null) {
@@ -236,10 +257,31 @@ class AuthHomeDisplay extends Component {
         });
     }
 
+    _fetchUserMatchingData = () => {
+        return this.props.firebase.getUserMatchingData().then(user => {
+            if (user && (this.timeout !== null)) {
+                const next = getNextMatchingDate();
+                const current = getCurrentMatchingDate();
+                const hasCurrentMatch = user.signups.includes(current);
+
+                this.setState({
+                    hasCurrentMatch: hasCurrentMatch,
+                    hasNextMatch: user.signups.includes(next),
+                    algorithmRunning: hasCurrentMatch && (user.currentMatch !== current)
+                });
+            }
+            else if (this.timeout !== null) {
+                this.props.setError('Error: Failed to fetch user data.');
+            }
+        }); 
+    }
+
     _updateTimeLeft = () => {
         this.timeout = setTimeout(this._updateTimeLeft, 1000);
-        this.setState({ timeLeft: this.state.timeLeft - 1000 });
+        const timeLeft = this.state.timeLeft - 1000;
+        if (timeLeft > 0) this.setState({ timeLeft: timeLeft });
+        else this.setState({ timeLeft: 'Just missed it!' });
     }
 }
 
-export default withRouter(withFirebase(AuthHomeDisplay));
+export default withRouter(withSession(withFirebase(AuthHomeDisplay)));

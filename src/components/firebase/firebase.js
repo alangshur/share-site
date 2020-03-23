@@ -47,6 +47,15 @@ class Firebase {
 
     /*** MATCHING API ***/
 
+    getUserMatchingData = () => {
+        const id = this.getUser().uid;
+        const userRef = this.db.collection('users').doc(id);
+        return userRef.get().then(user => {
+            if (user.exists) return user.data();
+            else return null;
+        });
+    }
+
     getNextMatching = () => {
         const date = getNextMatchingDate();
         const matchingRef = this.db.collection('matchings').doc(date);

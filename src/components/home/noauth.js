@@ -20,6 +20,9 @@ class NoAuthHomeDisplay extends Component {
     componentWillUnmount() {
         this.timeout && clearTimeout(this.timeout);
         this.timeout = null;
+
+        this.timeout2 && clearTimeout(this.timeout2);
+        this.timeout2 = null;
     }
 
     render() {
@@ -110,10 +113,13 @@ class NoAuthHomeDisplay extends Component {
     _fetchNextMatching = () => {
         this.props.firebase.getNextMatching().then(matching => {
             if (matching && (this.timeout !== null)) {
+                const timeLeft = matching.deadline.toMillis() - Date.now();
+
                 this.timeout = setTimeout(this._updateTimeLeft, 1000);
+                this.timeout2 = setTimeout(window.location.reload.bind(window.location), timeLeft);
                 this.setState({
                     userCount: matching.userCount,
-                    timeLeft: matching.deadline.toMillis() - Date.now(),
+                    timeLeft: timeLeft
                 });
             }
             else if (this.timeout !== null) {
@@ -124,7 +130,9 @@ class NoAuthHomeDisplay extends Component {
 
     _updateTimeLeft = () => {
         this.timeout = setTimeout(this._updateTimeLeft, 1000);
-        this.setState({ timeLeft: this.state.timeLeft - 1000 });
+        const timeLeft = this.state.timeLeft - 1000;
+        if (timeLeft > 0) this.setState({ timeLeft: timeLeft });
+        else this.setState({ timeLeft: 'Just missed it!' });
     }
 }
 

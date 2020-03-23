@@ -57,7 +57,7 @@ class HomePage extends Component {
                 }
                 
                 {/* loading icon */}
-                {(this.props.fetching || !this.props.initFetch) && 
+                {Boolean(this.props.fetching) && 
                     <LoadingSpinner />
                 }
                     
@@ -75,7 +75,7 @@ class HomePage extends Component {
         this.setState({ error: error }, () => {
             this.timeout = setTimeout(() => {
                 this.setState({ error: '' });
-            }, 10000);
+            }, 7000);
         });
     }
 }
