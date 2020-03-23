@@ -15,12 +15,12 @@ class AuthSurveyPage extends Component {
             fetching: true,
             error: '',
 
-            0: -1, 1: -1, 2: -1, 3: -1, 4: -1
+            0: -1, 1: -1, 2: -1, 3: -1
         }
     }
 
     componentDidMount() {
-        this.setState({ fetching: true}, () => {
+        this.setState({ fetching: true }, () => {
             this._fetchSurveyAnswers().then(() => {
                 this.setState({ fetching: false });
             });
@@ -170,7 +170,7 @@ class AuthSurveyPage extends Component {
         return this.props.firebase.getUserData().then(user => {
             if (user && user.surveyAnswers) {
                 for (var i = 0; i < SURVEY_QUESTIONS; i++)
-                    this.setState({ [i]: user.surveyAnswers[i] });
+                    this.setState({ [i]: Number(user.surveyAnswers[i]) });
             }
         });
     }

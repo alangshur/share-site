@@ -11,6 +11,14 @@ class SurveyQuestion extends Component {
         }
     }
 
+    componentDidUpdate() {
+        if (this.state.value !== this.props.initValue)
+            this.setState({ 
+                value: this.props.initValue,
+                edited: true
+            });
+    }
+
     render() {
         return (
             <div
@@ -28,6 +36,7 @@ class SurveyQuestion extends Component {
                     style={{ 
                         width: '350px', 
                         marginBottom: '20px', 
+                        
                         fontStyle: this.state.edited ? '' : 'italic' 
                     }}
                 >
