@@ -84,7 +84,7 @@ class Firebase {
 
     /*** SURVEY API ***/
 
-    updateSurveyAnswers = survey => {
+    submitSurveyAnswers = (survey, age, country, region) => {
         return this.getUser().getIdToken().then(token => {
             return fetch(FUNCTIONS_URL + 'updateSurvey', {
                 method: 'GET',
@@ -92,6 +92,9 @@ class Firebase {
                     'Content-Type': 'application/json',
                     'Authorization': token,
                     'Survey': survey,
+                    'Age': age,
+                    'Country': country,
+                    'Region': region
                 }
             }).then(res => res.json());
         });

@@ -26,7 +26,7 @@ class AuthHomeDisplay extends Component {
     componentDidMount() {
         this.props.setFetching(true);
         this._fetchNextMatching()
-            .then(this._fetchUserData)
+            .then(this._fetchUserMatchingData)
             .then(() => { this.props.setFetching(false); })
             .catch(err => { 
                 this.props.setFetching(false);

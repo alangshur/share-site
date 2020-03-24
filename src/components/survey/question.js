@@ -35,7 +35,7 @@ class SurveyQuestion extends Component {
                 <div 
                     style={{ 
                         width: '350px', 
-                        marginBottom: '20px', 
+                        marginBottom: '25px', 
                         
                         fontStyle: this.state.edited ? '' : 'italic' 
                     }}
