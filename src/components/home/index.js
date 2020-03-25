@@ -47,6 +47,7 @@ class HomePage extends Component {
                             style={{
                                 display: 'flex',
                                 justifyContent: 'center',
+                                zIndex: '10',
 
                                 width: '100%',
                             }}
@@ -75,7 +76,7 @@ class HomePage extends Component {
         this.setState({ error: error }, () => {
             this.timeout = setTimeout(() => {
                 this.setState({ error: '' });
-            }, 7000);
+            }, 5000);
         });
     }
 }

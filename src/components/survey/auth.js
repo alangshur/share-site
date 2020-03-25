@@ -14,7 +14,6 @@ class AuthSurveyPage extends Component {
         super(props);
         this.state = {
             fetching: true,
-            error: '',
 
             name: '',
             age: '',
@@ -26,22 +25,16 @@ class AuthSurveyPage extends Component {
 
     componentDidMount() {
         this.setState({ fetching: true }, () => {
-            this._fetchSurveyAnswers().then(() => {
-                this.setState({ fetching: false });
+            this._fetchSurveyData().then(result => {
+                if (result) this.setState({ fetching: false });
+                else this.props.setError('Failed to fetch user data. Please wait and try again.');
             });
         });
     }
 
     render() {
         return (
-            <div
-                style={{
-                    userSelect: 'none',
-                    msUserSelect: 'none',
-                    KhtmlUserSelect: 'none',
-                    MozUserSelect: 'none'
-                }}
-            >
+            <>
 
                 {/* loading icon */}
                 {this.state.fetching && 
@@ -77,8 +70,7 @@ class AuthSurveyPage extends Component {
                             width: '300px',
                             marginBottom: '70px',
                             
-                            fontSize: '20px',
-                            fontWeight: 'bold',
+                            fontSize: '22px',
                             textAlign: 'center'
                         }}
                     >
@@ -184,22 +176,6 @@ class AuthSurveyPage extends Component {
                         </Form.Group>
                     </Form>
 
-                    {/* error text */}
-                    {this.state.error &&
-                        <div
-                            style={{
-                                width: '300px',
-                                marginBottom: '20px',
-
-                                color: '#dc3545',
-                                fontSize: '12px',
-                                textAlign: 'center'
-                            }}
-                        >
-                            {this.state.error}
-                        </div>
-                    }
-
                     {/* submit button */}
                     <Button
                         onClick={this._submitSurveyAnswers}
@@ -225,7 +201,7 @@ class AuthSurveyPage extends Component {
                         Back
                     </Button>
                 </div>
-            </div>
+            </>
         );
     }
 
@@ -233,9 +209,11 @@ class AuthSurveyPage extends Component {
         this.setState({ [num]: val });
     }
 
-    _fetchSurveyAnswers = () => {
+    _fetchSurveyData = () => {
         return this.props.firebase.getUserData().then(user => {
             if (user && user.surveyAnswers) {
+
+                // save existing user data
                 this.setState({
                     name: user.name,
                     age: user.age,
@@ -243,12 +221,14 @@ class AuthSurveyPage extends Component {
                     region: user.region
                 });
 
+                // save existing answers
                 for (var i = 0; i < SURVEY_QUESTIONS; i++) {
                     this.setState({ [i]: Number(user.surveyAnswers[i]) });
                 }
             }
-            else if (!user) this.props.history.push('/');
+            else if (!user) return false;
             else this.setState({ name: user.name });
+            return true;
         });
     }
 
@@ -279,15 +259,14 @@ class AuthSurveyPage extends Component {
                     else throw new Error('Error communicating with server. Please wait and try again.');
                 });
 
+                // navigate home (success)
                 this.setState({ fetching: false }, () => {
                     this.props.history.push('/');
                 });
             }
             catch (err) {
-                this.setState({ 
-                    error: err.message,
-                    fetching: false 
-                });
+                this.setState({ fetching: false });
+                this.props.setError(err.message);
             }
         });
     }

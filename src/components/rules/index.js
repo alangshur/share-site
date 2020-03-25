@@ -41,7 +41,7 @@ class RulesPage extends Component {
                         flexDirection: 'column',
                         justifyContent: 'center',
 
-                        width: '350px',
+                        width: '360px',
                         height: '550px',
                         padding: '25px',
 
@@ -53,9 +53,7 @@ class RulesPage extends Component {
                     <div
                         style={{
                             alignSelf: 'center',
-
-                            fontWeight: 'bold',
-                            fontSize: '20px'
+                            fontSize: '22px'
                         }}
                     >
                         The rules are simple!

@@ -65,6 +65,7 @@ class AuthHomeDisplay extends Component {
                 {this.state.hasCurrentMatch &&
                     <Button
                         disabled={this.state.algorithmRunning}
+                        onClick={() => this.props.history.push('/match')}
                         variant='outline-dark'
                         style={{
                             position: 'relative',
@@ -267,7 +268,7 @@ class AuthHomeDisplay extends Component {
                 this.setState({
                     hasCurrentMatch: hasCurrentMatch,
                     hasNextMatch: user.signups.includes(next),
-                    algorithmRunning: hasCurrentMatch && (user.currentMatch !== current)
+                    algorithmRunning: hasCurrentMatch && (user.currentMatching !== current)
                 });
             }
             else if (this.timeout !== null) {
