@@ -25,9 +25,8 @@ class AuthSurveyPage extends Component {
 
     componentDidMount() {
         this.setState({ fetching: true }, () => {
-            this._fetchSurveyData().then(result => {
-                if (result) this.setState({ fetching: false });
-                else this.props.setError('Failed to fetch user data. Please wait and try again.');
+            this._fetchSurveyData().then(() => {
+                this.setState({ fetching: false });
             });
         });
     }
@@ -226,9 +225,8 @@ class AuthSurveyPage extends Component {
                     this.setState({ [i]: Number(user.surveyAnswers[i]) });
                 }
             }
-            else if (!user) return false;
+            else if (!user) this.props.setError('Error: Failed to fetch user data. Please wait and try again.');
             else this.setState({ name: user.name });
-            return true;
         });
     }
 
@@ -246,9 +244,9 @@ class AuthSurveyPage extends Component {
 
                 // validate field answers
                 if (isNaN(this.state.age) || (Number(this.state.age) < 12) || (Number(this.state.age) > 110))
-                    throw new Error('Please enter a valid age in years.');
-                if (!this.state.country) throw new Error('Please select a valid country.');
-                if (!this.state.region) throw new Error('Please select a valid region.');
+                    throw new Error('Please enter a valid age in years (12 to 110 years).');
+                if (!this.state.country) throw new Error('Please select a valid country from dropdown.');
+                if (!this.state.region) throw new Error('Please select a valid region from dropdown.');
 
                 // record answers
                 await this.props.firebase.submitSurveyAnswers(survey, this.state.age, 
@@ -256,7 +254,7 @@ class AuthSurveyPage extends Component {
                     
                     if (res.success) return;
                     else if (!res.success && res.message) throw new Error(res.message);
-                    else throw new Error('Error communicating with server. Please wait and try again.');
+                    else throw new Error('Failed to communicate with the server. Please wait and try again.');
                 });
 
                 // navigate home (success)
@@ -266,7 +264,7 @@ class AuthSurveyPage extends Component {
             }
             catch (err) {
                 this.setState({ fetching: false });
-                this.props.setError(err.message);
+                this.props.setError('Error: ' + err.message);
             }
         });
     }

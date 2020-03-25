@@ -108,7 +108,7 @@ class Firebase {
         const current = getCurrentMatchingDate();
         const matchRef = this.db.collection('matchings').doc(current)
             .collection('matches').doc(matchId);
-        matchRef.get().then(match => {
+        return matchRef.get().then(match => {
             if (match.exists) return match.data();
             else return null;
         });

@@ -11,18 +11,21 @@ class AuthMatchPage extends Component {
         this.state = {
             fetching: true,
             matchId: null,
+            
             users: null,
+            blockCount: null
         }
     }
 
     componentDidMount() {
         this.setState({ fetching: true }, () => {
-            this._fetchUserMatchData().then(result => {
-                if (result) this.setState({ matchId: result });
-                else { this.props.history.push('/'); return; }
-
-                /* load initial match data and then stop fetching */
-                this.setState({ fetching: false });
+            this._fetchUserMatchData().then(() => {
+                if (this.state.matchId) { 
+                    
+                    this._fetchMatchData().then(() => {
+                        this.setState({ fetching: false });
+                    });
+                }
             });
         });
     }
@@ -57,23 +60,43 @@ class AuthMatchPage extends Component {
         );
     }
 
+    _setStateAsync(state) {
+        return new Promise((resolve) => {
+            this.setState(state, resolve)
+        });
+    }
+
     _fetchUserMatchData = () => {
         return this.props.firebase.getUserData().then(user => {
             if (user) {
                 const current = getCurrentMatchingDate();
-                if (user.currentMatching === current) return user.currentMatchId;
-                else return false;
+                if ((user.currentMatching === current) && user.currentMatchId) 
+                    return this._setStateAsync({ matchId: user.currentMatchId });
+                else this.props.history.push('/');;
             }
-            else return false;
+            else this.props.setError('Error: Failed to fetch user data. Please wait and try again.');
         });
     }
 
     _fetchMatchData = () => {
         return this.props.firebase.getMatchData(this.state.matchId).then(match => {
             if (match) {
+                var userArray = [];
+                for (var id in match.users) {
+                    userArray.push({
+                        name: match.users[id].name,
+                        age: match.users[id].age,
+                        region: match.users[id].region,
+                        country: match.users[id].country
+                    });
+                }
 
+                return this._setStateAsync({ 
+                    users: userArray,
+                    blockCount: match.blockCount
+                });
             }
-            else this.props.history.push('/');
+            else this.props.setError('Error: Failed to fetch match data. Please wait and try again.');
         });
     }
 }

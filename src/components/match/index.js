@@ -57,7 +57,7 @@ class MatchPage extends Component {
                 }
 
                 {this.props.user ?
-                    <AuthMatchPage /> :
+                    <AuthMatchPage setError={this._setError} /> :
                     <LoadingSpinner />
                 }
             </div>
