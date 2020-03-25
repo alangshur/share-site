@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 
-import LoadingSpinner from '../../loader';
+import LoadingSpinner from '../../loading';
 import SurveyQuestion from './question';
 import { withFirebase } from '../firebase';
 
@@ -27,6 +27,9 @@ class AuthSurveyPage extends Component {
         this.setState({ fetching: true }, () => {
             this._fetchSurveyData().then(() => {
                 this.setState({ fetching: false });
+            }).catch(err => {
+                this.setState({ fetching: false });
+                this.props.setError('Error: Failed to contact servers.'); 
             });
         });
     }

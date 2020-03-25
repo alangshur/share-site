@@ -1,31 +1,47 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 
-import LoadingSpinner from '../../loader';
+import ChatDisplay from './chat';
+import LoadingSpinner from '../../loading';
 import { withFirebase } from '../firebase';
 import { getCurrentMatchingDate } from '../../util';
+import { withSession } from '../session';
 
 class AuthMatchPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            fetching: true,
+            fetching: false,
             matchId: null,
-            
+            current: getCurrentMatchingDate(),
+
             users: null,
-            blockCount: null
+            messages: null
         }
     }
 
     componentDidMount() {
         this.setState({ fetching: true }, () => {
+
+            // get user match info
             this._fetchUserMatchData().then(() => {
                 if (this.state.matchId) { 
-                    
+
+                    // get match info 
                     this._fetchMatchData().then(() => {
+                        if (!this.state.users) {
+                            this.setState({ fetching: false });
+                        }
+                    }).catch(err => {
                         this.setState({ fetching: false });
+                        this.props.setError('Error: Failed to contact servers.'); 
                     });
                 }
+                else this.setState({ fetching: false });
+            }).catch(err => {
+                this.setState({ fetching: false });
+                this.props.setError('Error: Failed to contact servers.'); 
             });
         });
     }
@@ -39,13 +55,14 @@ class AuthMatchPage extends Component {
                     <LoadingSpinner />
                 }
 
-                {/* match chat */}
+                {/* match page */}
                 <div
                     style={{
                         position: 'absolute',
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
+                        flexDirection: 'column',
 
                         top: 0,
                         left: 0,
@@ -53,26 +70,83 @@ class AuthMatchPage extends Component {
                         width: '100%',
                     }}
                 >
-                    Auth Match Page
-                </div>
 
+                    {/* back button */}
+                    <Button
+                        onClick={() => this.props.history.push('/')}
+                        size='sm'
+                        variant='secondary'
+                        style={{ width: '210px' }}
+                    >
+                        Back
+                    </Button>
+
+                    {/* match info */}
+                    {this.state.users &&
+                        <div
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                alignItems: 'space-between',
+                                justifyContent: 'space-between',
+                                flexWrap: 'wrap',
+
+                                width: '360px',
+                                padding: '10px',
+                                marginTop: '30px',
+
+                                color: '#36454F',
+                                borderRadius: '5px',
+                                backgroundColor: '#f9f9f9',
+                                boxShadow: '0 7px 14px 0 rgba(60, 66, 87, 0.12), 0 3px 6px 0 rgba(0, 0, 0, 0.12)'
+                            }}
+                        >
+                            {this.state.users.map(user => {
+                                return (
+                                    <div  
+                                        key={user.name}  
+                                        style={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+
+                                            margin: '15px',
+                                            fontSize: '13px'
+                                        }}
+                                    >       
+                                        <div><b>{user.name}</b>, {user.age}</div>
+                                        <div>{user.region}, {user.country}</div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    }
+
+                    {/* chat display */}
+                    {this.state.matchId && this.state.users &&
+                        <ChatDisplay 
+                            current={this.state.current}
+                            matchId={this.state.matchId}
+                            setFetching={state => { this.setState({ fetching: state }); }}
+                        />
+                    }
+
+                </div>
             </>
         );
     }
 
     _setStateAsync(state) {
         return new Promise((resolve) => {
-            this.setState(state, resolve)
+            this.setState(state, resolve);
         });
     }
 
     _fetchUserMatchData = () => {
         return this.props.firebase.getUserData().then(user => {
             if (user) {
-                const current = getCurrentMatchingDate();
-                if ((user.currentMatching === current) && user.currentMatchId) 
+                if ((user.currentMatching === this.state.current) && user.currentMatchId) 
                     return this._setStateAsync({ matchId: user.currentMatchId });
-                else this.props.history.push('/');;
+                else this.props.history.push('/');
             }
             else this.props.setError('Error: Failed to fetch user data. Please wait and try again.');
         });
@@ -91,14 +165,11 @@ class AuthMatchPage extends Component {
                     });
                 }
 
-                return this._setStateAsync({ 
-                    users: userArray,
-                    blockCount: match.blockCount
-                });
+                return this._setStateAsync({ users: userArray });
             }
             else this.props.setError('Error: Failed to fetch match data. Please wait and try again.');
         });
     }
 }
 
-export default withRouter(withFirebase(AuthMatchPage));
+export default withRouter(withSession(withFirebase(AuthMatchPage)));

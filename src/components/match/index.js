@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Alert } from 'react-bootstrap';
+import { Redirect } from 'react-router';
 
 import AuthMatchPage from './auth';
-import LoadingSpinner from '../../loader';
+import LoadingSpinner from '../../loading';
 import { withSession } from '../session';
 
 class MatchPage extends Component {
@@ -56,8 +57,14 @@ class MatchPage extends Component {
                     </div>
                 }
 
-                {this.props.user ?
-                    <AuthMatchPage setError={this._setError} /> :
+                {/* auth display */}
+                {this.props.authLoad ?
+                    <>
+                        {this.props.user ? 
+                            <AuthMatchPage  setError={this._setError} /> :
+                            <Redirect to='/' />
+                        } 
+                    </> :
                     <LoadingSpinner />
                 }
             </div>

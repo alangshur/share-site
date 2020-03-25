@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Alert } from 'react-bootstrap';
+import { Redirect } from 'react-router';
 
 import AuthSurveyPage from './auth';
-import LoadingSpinner from '../../loader';
+import LoadingSpinner from '../../loading';
 import { withSession } from '../session';
 
 class SurveyPage extends Component {
@@ -56,8 +57,14 @@ class SurveyPage extends Component {
                     </div>
                 }
 
-                {this.props.user ?
-                    <AuthSurveyPage setError={this._setError} /> :
+                {/* auth display */}
+                {this.props.authLoad ?
+                    <>
+                        {this.props.user ? 
+                            <AuthSurveyPage setError={this._setError} /> :
+                            <Redirect to='/' />
+                        } 
+                    </> :
                     <LoadingSpinner />
                 }
             </div>

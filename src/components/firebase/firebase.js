@@ -3,9 +3,12 @@ import 'firebase/analytics';
 import 'firebase/firestore';
 import 'firebase/auth';
 
-import { getNextMatchingDate, getCurrentMatchingDate } from '../../util';
+import { 
+    getNextMatchingDate, 
+    getCurrentMatchingDate 
+} from '../../util';
 
-var config = {
+const FIREBASE_CONFIG = {
     apiKey: "AIzaSyCVnih4H1x59l15DFh6Hi3DGqjatdVdhHE",
     authDomain: "share-site-8ee1b.firebaseapp.com",
     databaseURL: "https://share-site-8ee1b.firebaseio.com",
@@ -20,7 +23,7 @@ const FUNCTIONS_URL = 'https://us-central1-share-site-8ee1b.cloudfunctions.net/'
 
 class Firebase {
     constructor() {
-        app.initializeApp(config);
+        app.initializeApp(FIREBASE_CONFIG);
 
         this.auth = app.auth();
         this.db = app.firestore();
@@ -112,7 +115,31 @@ class Firebase {
             if (match.exists) return match.data();
             else return null;
         });
-    }   
+    }
+
+    getMessages = (current, matchId) => {
+        const messagesRef = this.db.collection('matchings').doc(current)
+            .collection('matches').doc(matchId).collection('messages');
+        return messagesRef.orderBy('timestamp', 'desc').limit(3).get().then(data => {
+            var messages = [];
+            data.forEach(doc => {
+                if (doc.exists) messages.push(doc.data());
+                else return null;
+            });
+
+            return messages;
+        });
+    }
+
+    writeMessage = (current, matchId, content) => {
+        const messageRef = this.db.collection('matchings').doc(current)
+            .collection('matches').doc(matchId).collection('messages').doc();
+        return messageRef.set({
+            name: this.getUser().displayName,
+            content: content,
+            timestamp: app.firestore.FieldValue.serverTimestamp(),
+        });
+    }
 }
 
 

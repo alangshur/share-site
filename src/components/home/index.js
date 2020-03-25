@@ -3,7 +3,7 @@ import { Alert } from 'react-bootstrap';
 
 import AuthHomeDisplay from './auth';
 import NoAuthHomeDisplay from './noauth';
-import LoadingSpinner from './../../loader';
+import LoadingSpinner from '../../loading';
 import { withSession } from '../session';
 
 class HomePage extends Component {
@@ -42,7 +42,7 @@ class HomePage extends Component {
                             padding: '20px'
                         }}
                     >
-                        <Alert 
+                        <Alert
                             variant='danger'
                             style={{
                                 display: 'flex',
@@ -56,16 +56,16 @@ class HomePage extends Component {
                         </Alert>
                     </div>
                 }
-                
-                {/* loading icon */}
-                {Boolean(this.props.fetching) && 
-                    <LoadingSpinner />
-                }
-                    
+
                 {/* auth/noauth displays */}
-                {this.props.user ? 
-                    <AuthHomeDisplay setError={this._setError} /> :
-                    <NoAuthHomeDisplay setError={this._setError} />
+                {this.props.authLoad ?
+                    <>
+                        {this.props.user ? 
+                            <AuthHomeDisplay setError={this._setError} /> :
+                            <NoAuthHomeDisplay setError={this._setError} />
+                        } 
+                    </> :
+                    <LoadingSpinner />
                 }
 
             </div>

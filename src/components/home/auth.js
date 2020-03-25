@@ -3,6 +3,7 @@ import { Button } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
 
+import LoadingSpinner from '../../loading';
 import { withSession } from '../session';
 import { withFirebase } from '../firebase';
 import { 
@@ -15,8 +16,11 @@ class AuthHomeDisplay extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            fetching: true,
+
             userCount: null,
             timeLeft: null,
+
             hasCurrentMatch: false,
             hasNextMatch: false,
             algorithmRunning: false
@@ -24,14 +28,15 @@ class AuthHomeDisplay extends Component {
     }
 
     componentDidMount() {
-        this.props.setFetching(true);
-        this._fetchNextMatching()
-            .then(this._fetchUserMatchingData)
-            .then(() => { this.props.setFetching(false); })
-            .catch(err => { 
-                this.props.setFetching(false);
-                this.props.setError('Error: Failed to contact servers.'); 
-            });
+        this.setState({ fetching: true }, () => {
+            this._fetchNextMatching()
+                .then(this._fetchUserMatchingData)
+                .then(() => { this.setState({ fetching: false }); })
+                .catch(err => { 
+                    this.setState({ fetching: false });
+                    this.props.setError('Error: Failed to contact servers.'); 
+                });
+        });
     }
 
     componentWillUnmount() {
@@ -44,199 +49,207 @@ class AuthHomeDisplay extends Component {
 
     render() {
         return (
-            <div
-                style={{
-                    position: 'absolute',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    flexDirection: 'column',
+            <>
 
-                    top: 0,
-                    left: 0,
-                    height: '100%',
-                    width: '100%',
-
-                    color: '#36454F'
-                }}
-            >
-
-                {/* matching button */}
-                {this.state.hasCurrentMatch &&
-                    <Button
-                        disabled={this.state.algorithmRunning}
-                        onClick={() => this.props.history.push('/match')}
-                        variant='outline-dark'
-                        style={{
-                            position: 'relative',
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-
-                            height: '40px',
-                            width: '360px',
-                            marginBottom: '35px',
-                            
-                            fontSize: '14px',
-                        }}
-                    >
-
-                        {this.state.algorithmRunning ?
-                            <>
-
-                                {/* match compute spinner */}
-                                <Loader
-                                    type='Oval'
-                                    color='black'
-                                    height={25}
-                                    width={25}
-                                    style={{ 
-                                        position: 'absolute',
-
-                                        top: '6px',
-                                        left: '9px',
-                                        marginRight: '50px' 
-                                    }}
-                                />
-
-                                <div>Computing matches... Check back soon!</div>
-                            </> :
-
-                            <>
-                                <div>Go to Current Match</div>
-
-                                {/* button arrow */}
-                                <div    
-                                    style={{
-                                        position: 'absolute',
-
-                                        top: '4px',
-                                        right: '12px',
-                                        height: '14px',
-                                        width: '14px',
-
-                                        fontSize: '18px'
-                                    }}
-                                >
-                                    >
-                                </div>
-                            </>
-                        }
-
-                    </Button>
+                {/* loading icon */}
+                {this.state.fetching && 
+                    <LoadingSpinner />
                 }
 
-                {/* top console */}
                 <div
                     style={{
+                        position: 'absolute',
                         display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
                         justifyContent: 'center',
+                        alignItems: 'center',
+                        flexDirection: 'column',
 
-                        width: '360px',
-                        height: '190px',
-                        marginBottom: '35px',
+                        top: 0,
+                        left: 0,
+                        height: '100%',
+                        width: '100%',
 
-                        color: '#36454F',
-                        borderRadius: '5px',
-                        backgroundColor: '#f2f2f2',
-                        boxShadow: '0 7px 14px 0 rgba(60, 66, 87, 0.12), 0 3px 6px 0 rgba(0, 0, 0, 0.12)'
+                        color: '#36454F'
                     }}
                 >
 
-                    {/* join button */}
-                    <Button
-                        onClick={() => this.props.history.push('/survey')}
-                        size='sm'
-                        variant='secondary'
-                        style={{
-                            width: '210px'
-                        }}
-                    >
-                        {this.state.hasNextMatch ? 'Edit Your Answers' : 'Join Next Matching'}
-                    </Button>
+                    {/* matching button */}
+                    {this.state.hasCurrentMatch &&
+                        <Button
+                            disabled={this.state.algorithmRunning}
+                            onClick={() => this.props.history.push('/match')}
+                            variant='outline-secondary'
+                            style={{
+                                position: 'relative',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                justifyContent: 'center',
+                                alignItems: 'center',
 
-                    {/* next matching count */}
+                                height: '35px',
+                                width: '360px',
+                                marginBottom: '35px',
+                                
+                                fontSize: '14px'
+                            }}
+                        >
+
+                            {this.state.algorithmRunning ?
+                                <>
+
+                                    {/* match compute spinner */}
+                                    <Loader
+                                        type='Oval'
+                                        color='black'
+                                        height={25}
+                                        width={25}
+                                        style={{ 
+                                            position: 'absolute',
+
+                                            top: '4px',
+                                            left: '9px',
+                                            marginRight: '50px' 
+                                        }}
+                                    />
+
+                                    <div>Computing matches... Check back soon!</div>
+                                </> :
+
+                                <>
+                                    <div>Go to Current Match</div>
+
+                                    {/* button arrow */}
+                                    <div    
+                                        style={{
+                                            position: 'absolute',
+
+                                            top: '2px',
+                                            right: '12px',
+                                            height: '14px',
+                                            width: '14px',
+
+                                            fontSize: '18px'
+                                        }}
+                                    >
+                                        >
+                                    </div>
+                                </>
+                            }
+
+                        </Button>
+                    }
+
+                    {/* top console */}
                     <div
                         style={{
-                            marginTop: '40px',
-                            fontSize: '14px'
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+
+                            width: '360px',
+                            height: '190px',
+                            marginBottom: '35px',
+
+                            color: '#36454F',
+                            borderRadius: '5px',
+                            backgroundColor: '#f9f9f9',
+                            boxShadow: '0 7px 14px 0 rgba(60, 66, 87, 0.12), 0 3px 6px 0 rgba(0, 0, 0, 0.12)'
                         }}
                     >
-                        
-                        People In Next Matching:&nbsp;
-                        <b>
-                            {this.state.userCount ?
-                                this.state.userCount.toLocaleString() :
-                                '--'
-                            }
-                        </b>
+
+                        {/* join button */}
+                        <Button
+                            onClick={() => this.props.history.push('/survey')}
+                            size='sm'
+                            variant='secondary'
+                            style={{
+                                width: '210px'
+                            }}
+                        >
+                            {this.state.hasNextMatch ? 'Edit Your Answers' : 'Join Next Matching'}
+                        </Button>
+
+                        {/* next matching count */}
+                        <div
+                            style={{
+                                marginTop: '40px',
+                                fontSize: '14px'
+                            }}
+                        >
+                            
+                            People In Next Matching:&nbsp;
+                            <b>
+                                {this.state.userCount ?
+                                    this.state.userCount.toLocaleString() :
+                                    '--'
+                                }
+                            </b>
+                        </div>
+
+                        {/* time left to next matching */}
+                        <div
+                            style={{
+                                marginTop: '10px',
+                                fontSize: '14px'
+                            }}
+                        >
+
+                            Time to Join:&nbsp;
+                            <b>
+                                {this.state.timeLeft ?
+                                    formatTimeFromMs(this.state.timeLeft) :
+                                    '--'
+                                }
+                            </b>
+                        </div>
                     </div>
 
-                    {/* time left to next matching */}
+                    {/* bottom console */}
                     <div
                         style={{
-                            marginTop: '10px',
-                            fontSize: '14px'
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+
+                            width: '360px',
+                            height: '170px',
+
+                            color: '#36454F',
+                            borderRadius: '5px',
+                            backgroundColor: '#f9f9f9',
+                            boxShadow: '0 7px 14px 0 rgba(60, 66, 87, 0.12), 0 3px 6px 0 rgba(0, 0, 0, 0.12)'
                         }}
                     >
 
-                        Time to Join:&nbsp;
-                        <b>
-                            {this.state.timeLeft ?
-                                formatTimeFromMs(this.state.timeLeft) :
-                                '--'
-                            }
-                        </b>
+                        {/* rules button */}
+                        <Button
+                            onClick={() => { this.props.history.push('/rules'); }}
+                            variant='secondary'
+                            size='sm'
+                            style={{
+                                width: '210px'
+                            }}
+                        >
+                            How does this work?
+                        </Button>
+
+                        {/* sign out button */}
+                        <Button
+                            onClick={this.props.firebase.doSignOut}
+                            variant='secondary'
+                            size='sm'
+                            style={{
+                                width: '210px',
+                                marginTop: '35px'
+                            }}
+                        >
+                            Sign Out
+                        </Button>
                     </div>
                 </div>
-
-                {/* bottom console */}
-                <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-
-                        width: '360px',
-                        height: '170px',
-
-                        color: '#36454F',
-                        borderRadius: '5px',
-                        backgroundColor: '#f2f2f2',
-                        boxShadow: '0 7px 14px 0 rgba(60, 66, 87, 0.12), 0 3px 6px 0 rgba(0, 0, 0, 0.12)'
-                    }}
-                >
-
-                    {/* rules button */}
-                    <Button
-                        onClick={() => { this.props.history.push('/rules'); }}
-                        variant='secondary'
-                        size='sm'
-                        style={{
-                            width: '210px'
-                        }}
-                    >
-                        How does this work?
-                    </Button>
-
-                    {/* sign out button */}
-                    <Button
-                        onClick={this.props.firebase.doSignOut}
-                        variant='secondary'
-                        size='sm'
-                        style={{
-                            width: '210px',
-                            marginTop: '35px'
-                        }}
-                    >
-                        Sign Out
-                    </Button>
-                </div>
-            </div>
+            </>
         );
     }
 

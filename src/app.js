@@ -14,8 +14,7 @@ class App extends Component {
         super(props);
         this.state = {
             user: null,
-            fetching: 1,
-            setFetching: this._setFetching
+            authLoad: false
         };
     }
 
@@ -24,8 +23,7 @@ class App extends Component {
             user => {
                 this.setState({
                     user: user,
-                    fetching: !this.state.fetching ? 0 : this.state.fetching - 1,
-                    initFetch: true
+                    authLoad: true
                 });
             }
         );
@@ -49,11 +47,6 @@ class App extends Component {
                 </BrowserRouter>
             </SessionContext.Provider>
         );
-    }
-
-    _setFetching = state => {
-        if (state) this.setState({ fetching: this.state.fetching + 1 });
-        else this.setState({ fetching: !this.state.fetching ? 0 : this.state.fetching - 1 });
     }
 }
 
