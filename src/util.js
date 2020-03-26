@@ -40,3 +40,12 @@ export function getCurrentMatchingDate() {
     now.setUTCDate(now.getUTCDate() + (12 - now.getUTCDay()) % 7 - 7);
     return (now.getUTCMonth() + 1) + '-' + now.getUTCDate() + '-' + now.getUTCFullYear();
 }
+
+// get formatted date for chat
+export function getFormattedDate(epochSeconds) {
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 
+        'July', 'August', 'September', 'October', 'November', 'December'];
+    const date = new Date(epochSeconds * 1000);
+    return monthNames[date.getMonth()] + ' ' + date.getDate() + ' at ' 
+        + date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+}

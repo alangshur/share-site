@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { withFirebase } from '../firebase';
 import { withSession } from '../session';
 import { isMobile } from 'react-device-detect';
+import { getFormattedDate } from '../../util';
 
 import SendIcon from '../../assets/send-icon.png';
 
@@ -12,7 +13,8 @@ class ChatDisplay extends Component {
         this.state = {
             messages: null,
             messageCount: null,
-            input: ''
+            input: '',
+            sendHover: false
         }
     }
 
@@ -47,10 +49,6 @@ class ChatDisplay extends Component {
                 {/* messages */}
                 <div
                     style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        flexDirection: 'column',
-
                         height: '100%',
                         overflow: 'scroll'
                     }}
@@ -59,29 +57,74 @@ class ChatDisplay extends Component {
                         const belongsToUser = Boolean(message.name === this.props.user.displayName);
                         const matchesAboveUser = Boolean((index > 0) && (message.name === this.state.messages[index - 1].name));
                         const matchesBelowUser = Boolean((index < (this.state.messageCount - 1)) && (message.name === this.state.messages[index + 1].name));
+                        const timeSinceLast = (index > 0) ? message.timestamp.seconds - this.state.messages[index - 1].timestamp.seconds : 3600;
 
                         return (
                             <div 
-                                key={message.timestamp}
+                                key={'main' + message.timestamp}
                                 style={{
-                                    alignSelf: belongsToUser ? 'flex-end' : 'flex-start',
-
-                                    maxWidth: '250px',
-                                    padding: '5px',
-                                    paddingLeft: '10px',
-                                    paddingRight: '12px',
-                                    marginBottom: '2px',
-
-                                    fontSize: isMobile ? '11px' : '12px',
-                                    borderTopRightRadius: (belongsToUser && matchesAboveUser) ? '3px' : '15px',
-                                    borderBottomRightRadius: (belongsToUser && matchesBelowUser) ? '3px' : '15px',
-                                    borderTopLeftRadius: (!belongsToUser && matchesAboveUser) ? '3px' : '15px',
-                                    borderBottomLeftRadius: (!belongsToUser && matchesBelowUser) ? '3px' : '15px',
-                                    backgroundColor: belongsToUser ? '#0078FF' : '#e9e9e9',
-                                    color: belongsToUser ? 'white' : 'black'
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    flexDirection: 'column'
                                 }}
                             >
-                                {message.content}
+
+                                {/* message time */}
+                                {(timeSinceLast >= 3600) &&
+                                    <div
+                                        key={'time' + message.timestamp}
+                                        style={{
+                                            margin: '10px',
+                                            fontSize: '12px',
+                                            color: '#919191'
+                                        }}
+                                    >
+                                        {getFormattedDate(message.timestamp.seconds).toUpperCase()}
+                                    </div>
+                                }
+
+
+                                {/* user tag */}
+                                {!belongsToUser && !matchesAboveUser && 
+                                    <div
+                                        key={'user' + message.timestamp}
+                                        style={{
+                                            alignSelf: 'flex-start',
+
+                                            marginLeft: '10px',
+                                            marginBottom: '5px',
+
+                                            fontSize: '11px',
+                                            color: '#919191'
+                                        }} 
+                                    >
+                                        {message.name}
+                                    </div>
+                                }
+
+                                {/* message bubble */}
+                                <div 
+                                    key={'message' + message.timestamp}
+                                    style={{
+                                        alignSelf: belongsToUser ? 'flex-end' : 'flex-start',
+
+                                        maxWidth: isMobile ? '235px' : '350px',
+                                        padding: '5px',
+                                        paddingLeft: '10px',
+                                        paddingRight: '12px',
+                                        marginBottom: '2px',
+
+                                        fontSize: isMobile ? '11px' : '12px',
+                                        borderTopRightRadius: (belongsToUser && matchesAboveUser) ? '3px' : '15px',
+                                        borderBottomRightRadius: (belongsToUser && matchesBelowUser) ? '3px' : '15px',
+                                        borderTopLeftRadius: (!belongsToUser && matchesAboveUser) ? '3px' : '15px',
+                                        borderBottomLeftRadius: (!belongsToUser && matchesBelowUser) ? '3px' : '15px',
+                                        backgroundColor: belongsToUser ? '#0078FF' : '#e9e9e9',
+                                        color: belongsToUser ? 'white' : 'black'
+                                    }}
+                                >
+                                    {message.content}
+                                </div>
                             </div>
                         );
                     })}
@@ -113,7 +156,7 @@ class ChatDisplay extends Component {
                         rows={1}
                         style={{
                             height: '36px',
-                            width: '78%',
+                            width: isMobile ? '78%' : '65%',
                             padding: '10px',
                             paddingLeft: '15px',
                             paddingRight: '15px',
@@ -130,15 +173,20 @@ class ChatDisplay extends Component {
                     />
 
                     <img 
-
+                        onMouseEnter={() => { this.setState({ sendHover: true }); }}
+                        onMouseLeave={() => { this.setState({ sendHover: false }); }}
                         src={SendIcon}
                         alt='Send Icon'
                         style={{
-                            height: '33px',
+                            height: '35px',
+                            width: '35px',
                             marginLeft: isMobile ? '15px' : '23px',
+                            padding: '4px',
+                            paddingRight: '0px',
 
+                            borderRadius: '20px',
+                            backgroundColor: this.state.sendHover ? '#eeeeee' : '#f9f9f9',
                             cursor: 'pointer',
-                            filter: 'invert(37%) sepia(68%) saturate(5134%) hue-rotate(201deg) brightness(101%) contrast(105%)'
                         }}
                     />
                 </div>

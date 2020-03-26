@@ -129,6 +129,7 @@ class AuthMatchPage extends Component {
                             current={this.state.current}
                             matchId={this.state.matchId}
                             setFetching={state => { this.setState({ fetching: state }); }}
+                            setError={this.props.setError}
                         />
                     }
 
