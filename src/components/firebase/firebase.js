@@ -2,6 +2,7 @@ import app from 'firebase/app';
 import 'firebase/analytics';
 import 'firebase/firestore';
 import 'firebase/auth';
+import { v1 as uuid } from 'uuid';
 
 import { 
     getNextMatchingDate, 
@@ -32,6 +33,13 @@ class Firebase {
         this.googleProvider = new app.auth.GoogleAuthProvider();
     }
 
+
+
+    /*** FIREBASE UTIL ***/
+
+    getFirebaseTimestamp = () => {
+        return app.firestore.Timestamp.now();
+    }
 
 
     /*** AUTH API ***/
@@ -117,7 +125,7 @@ class Firebase {
         });
     }
 
-    getMessages = (current, matchId) => {
+    getMessageBlock = (current, matchId) => {
         const messagesRef = this.db.collection('matchings').doc(current)
             .collection('matches').doc(matchId).collection('messages');
         return messagesRef.orderBy('timestamp', 'desc').limit(3).get().then(data => {
@@ -131,14 +139,32 @@ class Firebase {
         });
     }
 
+    getMessages = (current, matchId, onSuccess, onFailure) => {
+        const messagesRef = this.db.collection('matchings').doc(current)
+            .collection('matches').doc(matchId).collection('messages');
+        messagesRef.orderBy('timestamp', 'desc').limit(50).onSnapshot(snapshot => {
+            snapshot.docChanges().reverse().forEach(change => {
+                if ((change.type === 'added' || change.type === 'modified')) {
+                    if (change.doc.exists) {
+                        const message = change.doc.data();
+                        if (message.timestamp) onSuccess(change.doc.id, message);
+                    }
+                    else onFailure();
+                }
+            });
+        });
+    }
+
     writeMessage = (current, matchId, content) => {
+        const messageId = uuid();
         const messageRef = this.db.collection('matchings').doc(current)
-            .collection('matches').doc(matchId).collection('messages').doc();
+            .collection('matches').doc(matchId).collection('messages').doc(messageId);
         return messageRef.set({
+            id: messageId,
             name: this.getUser().displayName,
             content: content,
             timestamp: app.firestore.FieldValue.serverTimestamp(),
-        });
+        }).then(() => messageId);
     }
 }
 

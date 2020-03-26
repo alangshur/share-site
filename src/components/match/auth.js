@@ -30,9 +30,7 @@ class AuthMatchPage extends Component {
 
                     // get match info 
                     this._fetchMatchData().then(() => {
-                        if (!this.state.users) {
-                            this.setState({ fetching: false });
-                        }
+                        this.setState({ fetching: false });
                     }).catch(err => {
                         this.setState({ fetching: false });
                         this.props.setError('Error: Failed to contact servers.'); 
@@ -128,7 +126,6 @@ class AuthMatchPage extends Component {
                         <ChatDisplay 
                             current={this.state.current}
                             matchId={this.state.matchId}
-                            setFetching={state => { this.setState({ fetching: state }); }}
                             setError={this.props.setError}
                         />
                     }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './style.css';
 
 import { withFirebase } from '../firebase';
 import { withSession } from '../session';
@@ -11,27 +12,31 @@ class ChatDisplay extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            messages: null,
-            messageCount: null,
+            messages: [],
+            messageCount: 0,
+            lastUserMessageId: null,
+
             input: '',
+            inputHeight: '30px',
             sendHover: false
         }
     }
 
     componentDidMount() {
-        this._fetchMessages().then(() => {
-            this.props.setFetching(false);
-        }).catch(err => {
-            this.props.setFetching(false);
-            this.props.setError('Error: Failed to contact servers.'); 
-        });
+        document.addEventListener('keydown', this._handleKeyDown);
+        this._fetchMessages();
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this._handleKeyDown);
     }
 
     render() {
         return (
             <div
                 style={{
-                    position: 'relative',
+                    display: 'flex',
+                    flexDirection: 'column',
 
                     width: isMobile ? '360px' : '720px',
                     height: isMobile ? '480px' : '70%',
@@ -48,20 +53,22 @@ class ChatDisplay extends Component {
 
                 {/* messages */}
                 <div
+                    onLoad={() => { console.log('loaded' )}}
                     style={{
                         height: '100%',
                         overflow: 'scroll'
                     }}
                 >
-                    {this.state.messages && this.state.messages.map((message, index) => {
+                    {this.state.messages && this.state.messages.map((message, index) => {                                                 
                         const belongsToUser = Boolean(message.name === this.props.user.displayName);
                         const matchesAboveUser = Boolean((index > 0) && (message.name === this.state.messages[index - 1].name));
                         const matchesBelowUser = Boolean((index < (this.state.messageCount - 1)) && (message.name === this.state.messages[index + 1].name));
-                        const timeSinceLast = (index > 0) ? message.timestamp.seconds - this.state.messages[index - 1].timestamp.seconds : 3600;
+                        const largeTimeGapAbove = (index > 0) ? Boolean((message.timestamp.seconds - this.state.messages[index - 1].timestamp.seconds) >= 3600) : true;
+                        const largeTimeGapBelow = (index < (this.state.messageCount - 1)) ? Boolean((this.state.messages[index + 1].timestamp.seconds - message.timestamp.seconds) >= 3600) : true;
 
                         return (
                             <div 
-                                key={'main' + message.timestamp}
+                                key={message.id}
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center',
@@ -70,12 +77,13 @@ class ChatDisplay extends Component {
                             >
 
                                 {/* message time */}
-                                {(timeSinceLast >= 3600) &&
+                                {largeTimeGapAbove &&
                                     <div
-                                        key={'time' + message.timestamp}
+                                        key={'t-' + message.id}
                                         style={{
-                                            margin: '10px',
-                                            fontSize: '12px',
+                                            marginTop: '15px',
+                                            marginBottom: '10px',
+                                            fontSize: '11px',
                                             color: '#919191'
                                         }}
                                     >
@@ -83,15 +91,14 @@ class ChatDisplay extends Component {
                                     </div>
                                 }
 
-
                                 {/* user tag */}
                                 {!belongsToUser && !matchesAboveUser && 
                                     <div
-                                        key={'user' + message.timestamp}
+                                        key={'u-' + message.id}
                                         style={{
                                             alignSelf: 'flex-start',
 
-                                            marginLeft: '10px',
+                                            marginLeft: '7px',
                                             marginBottom: '5px',
 
                                             fontSize: '11px',
@@ -104,7 +111,7 @@ class ChatDisplay extends Component {
 
                                 {/* message bubble */}
                                 <div 
-                                    key={'message' + message.timestamp}
+                                    key={'m-' + message.id}
                                     style={{
                                         alignSelf: belongsToUser ? 'flex-end' : 'flex-start',
 
@@ -114,17 +121,35 @@ class ChatDisplay extends Component {
                                         paddingRight: '12px',
                                         marginBottom: '2px',
 
+                                        wordWrap: 'break-word',
                                         fontSize: isMobile ? '11px' : '12px',
-                                        borderTopRightRadius: (belongsToUser && matchesAboveUser) ? '3px' : '15px',
-                                        borderBottomRightRadius: (belongsToUser && matchesBelowUser) ? '3px' : '15px',
-                                        borderTopLeftRadius: (!belongsToUser && matchesAboveUser) ? '3px' : '15px',
-                                        borderBottomLeftRadius: (!belongsToUser && matchesBelowUser) ? '3px' : '15px',
+                                        borderTopRightRadius: (belongsToUser && matchesAboveUser && !largeTimeGapAbove) ? '3px' : '15px',
+                                        borderBottomRightRadius: (belongsToUser && matchesBelowUser && !largeTimeGapBelow) ? '3px' : '15px',
+                                        borderTopLeftRadius: (!belongsToUser && matchesAboveUser && !largeTimeGapAbove) ? '3px' : '15px',
+                                        borderBottomLeftRadius: (!belongsToUser && matchesBelowUser && !largeTimeGapBelow) ? '3px' : '15px',
                                         backgroundColor: belongsToUser ? '#0078FF' : '#e9e9e9',
                                         color: belongsToUser ? 'white' : 'black'
                                     }}
                                 >
                                     {message.content}
                                 </div>
+
+                                {/* message status */}
+                                {belongsToUser && (this.state.lastUserMessageId === message.id) &&
+                                    <div
+                                        key={'status' + message.timestamp}
+                                        style={{
+                                            alignSelf: 'flex-end',
+                                            marginRight: '7px',
+                                            marginBottom: '5px',
+
+                                            fontSize: '9px',
+                                            color: '#919191'
+                                        }} 
+                                    >
+                                        {message.status}
+                                    </div>
+                                }
                             </div>
                         );
                     })}
@@ -133,7 +158,6 @@ class ChatDisplay extends Component {
                 {/* message input */}
                 <div   
                     style={{
-                        position: 'absolute',
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'flex-end',
@@ -155,31 +179,33 @@ class ChatDisplay extends Component {
                         placeholder='Type a message...'
                         rows={1}
                         style={{
-                            height: '36px',
+                            height: this.state.inputHeight,
                             width: isMobile ? '78%' : '65%',
-                            padding: '10px',
-                            paddingLeft: '15px',
-                            paddingRight: '15px',
+                            padding: '7px',
+                            paddingLeft: '20px',
+                            paddingRight: '20px',
 
                             lineHeight: '16px',
                             resize: 'none',
                             overflow: 'hidden',
                             borderRadius: '20px',
                             backgroundColor: '#e9e9e9',
-                            fontSize: '12px',
+                            fontSize: '13px',
                             borderWidth: '0px',
-                            outlineWidth: '0px'
+                            outlineWidth: '0px',
                         }}
                     />
 
                     <img 
+                        onClick={this._submitMessage}
                         onMouseEnter={() => { this.setState({ sendHover: true }); }}
                         onMouseLeave={() => { this.setState({ sendHover: false }); }}
                         src={SendIcon}
                         alt='Send Icon'
                         style={{
-                            height: '35px',
-                            width: '35px',
+                            height: '38px',
+                            width: '38px',
+                            marginBottom: '-4px',
                             marginLeft: isMobile ? '15px' : '23px',
                             padding: '4px',
                             paddingRight: '0px',
@@ -194,33 +220,88 @@ class ChatDisplay extends Component {
         );
     }
 
+    _handleKeyDown = event => {
+        if (event.code === 'Enter' || event.key === 'Enter') {
+            this._submitMessage();
+            event.preventDefault();
+        }
+    }
+
     _handleInputChange = event => {
         const field = event.target;
         if (field.value.length > 250) return;
-        else this.setState({ input: field.value });
-
-        field.style.height = 'auto';
-        field.style.height = field.scrollHeight + 'px';
+        else this.setState({ 
+            input: field.value,
+            inputHeight: 'auto'
+        }, () => {
+            this.setState({ 
+                inputHeight: field.scrollHeight + 'px' 
+            });
+        });
     }
 
     _submitMessage = () => {
-        return this.props.firebase.writeMessage(
-            this.state.current, 
-            this.state.matchId,
-            'Hello, world!3'
-        );
+        if ((this.state.input.length <= 0) || (this.state.input.length > 250)) return;
+
+        this.props.firebase.writeMessage(
+            this.props.current, 
+            this.props.matchId,
+            this.state.input
+        ).then(messageId => {
+            this.setState({
+                input: '',
+                inputHeight: '30px', 
+                lastUserMessageId: messageId,
+                messageCount: this.state.messageCount + 1,
+                messages: this.state.messages.concat({
+                    id: messageId,
+                    content: this.state.input,
+                    name: this.props.user.displayName,
+                    timestamp: this.props.firebase.getFirebaseTimestamp(),
+                    status: 'Sent'
+                })
+            });
+        }).catch(err => {
+            this.props.setError('Error: Failed to send message. Please wait and try again.');
+        });
     }
 
     _fetchMessages = () => {
-        return this.props.firebase.getMessages(
+        this.props.firebase.getMessages(
             this.props.current, 
-            this.props.matchId
-        ).then(result => {
-            if (result) this.setState({ 
-                messages: result.reverse(),
-                messageCount: result.length
-            });
-        });
+            this.props.matchId,
+            (id, message) => {
+                if (this.state.lastUserMessageId === id) {
+                    const index = this.state.messages.findIndex(el => el.id === id);
+                    const messages = [
+                        ...this.state.messages.slice(0, index), 
+                        { ...message, status: 'Delivered' },
+                        ...this.state.messages.slice(index + 1)
+                    ];
+
+                    this.setState({ messages: messages });
+                }
+                else if (message.name === this.props.user.displayName) {
+                    this.setState({
+                        lastUserMessageId: id,
+                        messageCount: this.state.messageCount + 1,
+                        messages: this.state.messages.concat({
+                            ...message,
+                            status: 'Delivered'
+                        })
+                    });
+                }
+                else {
+                    this.setState({
+                        messageCount: this.state.messageCount + 1,
+                        messages: this.state.messages.concat(message)
+                    });
+                }
+            },
+            () => {
+                this.props.setError('Error: Failed to fetch message data. Please wait and try again.');
+            }
+        );
     }
 }
 
