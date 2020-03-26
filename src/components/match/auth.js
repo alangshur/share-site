@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
+import { isMobile } from 'react-device-detect';
 
 import ChatDisplay from './chat';
 import LoadingSpinner from '../../loading';
 import { withFirebase } from '../firebase';
 import { getCurrentMatchingDate } from '../../util';
-import { withSession } from '../session';
 
 class AuthMatchPage extends Component {
     constructor(props) {
@@ -72,14 +72,16 @@ class AuthMatchPage extends Component {
                 >
 
                     {/* back button */}
-                    <Button
-                        onClick={() => this.props.history.push('/')}
-                        size='sm'
-                        variant='secondary'
-                        style={{ width: '210px' }}
-                    >
-                        Back
-                    </Button>
+                    {!this.state.fetching &&
+                        <Button
+                            onClick={() => this.props.history.push('/')}
+                            size='sm'
+                            variant='secondary'
+                            style={{ width: '210px' }}
+                        >
+                            Back
+                        </Button>
+                    }
 
                     {/* match info */}
                     {this.state.users &&
@@ -91,14 +93,14 @@ class AuthMatchPage extends Component {
                                 justifyContent: 'space-between',
                                 flexWrap: 'wrap',
 
-                                width: '360px',
+                                width: isMobile ? '360px' : '720px',
                                 padding: '10px',
                                 marginTop: '30px',
 
                                 color: '#36454F',
                                 borderRadius: '5px',
                                 backgroundColor: '#f9f9f9',
-                                boxShadow: '0 7px 14px 0 rgba(60, 66, 87, 0.12), 0 3px 6px 0 rgba(0, 0, 0, 0.12)'
+                                boxShadow: '0 7px 14px 0 rgba(60, 66, 87, 0.07), 0 3px 6px 0 rgba(0, 0, 0, 0.07)'
                             }}
                         >
                             {this.state.users.map(user => {
@@ -172,4 +174,4 @@ class AuthMatchPage extends Component {
     }
 }
 
-export default withRouter(withSession(withFirebase(AuthMatchPage)));
+export default withRouter(withFirebase(AuthMatchPage));

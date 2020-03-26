@@ -154,7 +154,7 @@ class AuthHomeDisplay extends Component {
                             color: '#36454F',
                             borderRadius: '5px',
                             backgroundColor: '#f9f9f9',
-                            boxShadow: '0 7px 14px 0 rgba(60, 66, 87, 0.12), 0 3px 6px 0 rgba(0, 0, 0, 0.12)'
+                            boxShadow: '0 7px 14px 0 rgba(60, 66, 87, 0.07), 0 3px 6px 0 rgba(0, 0, 0, 0.07)'
                         }}
                     >
 
@@ -219,7 +219,7 @@ class AuthHomeDisplay extends Component {
                             color: '#36454F',
                             borderRadius: '5px',
                             backgroundColor: '#f9f9f9',
-                            boxShadow: '0 7px 14px 0 rgba(60, 66, 87, 0.12), 0 3px 6px 0 rgba(0, 0, 0, 0.12)'
+                            boxShadow: '0 7px 14px 0 rgba(60, 66, 87, 0.07), 0 3px 6px 0 rgba(0, 0, 0, 0.07)'
                         }}
                     >
 
