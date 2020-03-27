@@ -13,6 +13,7 @@ class AuthMatchPage extends Component {
         super(props);
         this.state = {
             fetching: false,
+            initLoad: false,
             matchId: null,
             current: getCurrentMatchingDate(),
 
@@ -30,15 +31,15 @@ class AuthMatchPage extends Component {
 
                     // get match info 
                     this._fetchMatchData().then(() => {
-                        this.setState({ fetching: false });
+                        this.setState({ fetching: false, initLoad: true });
                     }).catch(err => {
-                        this.setState({ fetching: false });
+                        this.setState({ fetching: false, initLoad: true });
                         this.props.setError('Error: Failed to contact servers.'); 
                     });
                 }
-                else this.setState({ fetching: false });
+                else this.setState({ fetching: false, initLoad: true });
             }).catch(err => {
-                this.setState({ fetching: false });
+                this.setState({ fetching: false, initLoad: true });
                 this.props.setError('Error: Failed to contact servers.'); 
             });
         });
@@ -70,7 +71,7 @@ class AuthMatchPage extends Component {
                 >
 
                     {/* back button */}
-                    {!this.state.fetching &&
+                    {this.state.initLoad &&
                         <Button
                             onClick={() => this.props.history.push('/')}
                             size='sm'

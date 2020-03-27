@@ -37,8 +37,12 @@ class Firebase {
 
     /*** FIREBASE UTIL ***/
 
-    getFirebaseTimestamp = () => {
+    getFirebaseTimestampNow = () => {
         return app.firestore.Timestamp.now();
+    }
+
+    getFirebaseTimestamp = (seconds, nanoseconds) => {
+        return new app.firestore.Timestamp(seconds, nanoseconds);
     }
 
 
@@ -125,10 +129,11 @@ class Firebase {
         });
     }
 
-    getMessageBlock = (current, matchId) => {
+    getMessageBlock = (current, matchId, limit, startTime) => {
         const messagesRef = this.db.collection('matchings').doc(current)
             .collection('matches').doc(matchId).collection('messages');
-        return messagesRef.orderBy('timestamp', 'desc').limit(3).get().then(data => {
+        return messagesRef.orderBy('timestamp', 'desc').startAt(startTime)
+            .limit(limit).get().then(data => {
             var messages = [];
             data.forEach(doc => {
                 if (doc.exists) messages.push(doc.data());
@@ -139,19 +144,18 @@ class Firebase {
         });
     }
 
-    getMessages = (current, matchId, onSuccess, onFailure) => {
+    getMessages = (current, matchId, limit, onSuccess, onFailure) => {
         const messagesRef = this.db.collection('matchings').doc(current)
             .collection('matches').doc(matchId).collection('messages');
-        messagesRef.orderBy('timestamp', 'desc').limit(50).onSnapshot(snapshot => {
+        messagesRef.orderBy('timestamp', 'desc').limit(limit).onSnapshot(snapshot => {
             const changes = snapshot.docChanges().reverse();
-            const bulk = Boolean(changes.length > 5);
+            const bulk = Boolean(changes.length > 10);
 
             changes.forEach((change, index) => {
                 if (change.doc.exists) {
                     const message = change.doc.data();
                     const bulkStart = bulk && (index === 0);
                     const bulkEnd = bulk && (index === changes.length - 1);
-
                     if (message.timestamp) onSuccess(
                         change.type,
                         change.doc.id, 

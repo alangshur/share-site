@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Button } from 'react-bootstrap';
 import { animateScroll } from 'react-scroll';
 import './style.css';
 
@@ -6,8 +7,23 @@ import { withFirebase } from '../firebase';
 import { withSession } from '../session';
 import { isMobile } from 'react-device-detect';
 import { getFormattedDate } from '../../util';
-
 import SendIcon from '../../assets/send-icon.png';
+
+const MESSAGE_COUNT_LIMIT = 10;
+
+const ALLOW_SELECT = {
+    userSelect: 'text',
+    msUserSelect: 'text',
+    KhtmlUserSelect: 'text',
+    MozUserSelect: 'text'
+}
+
+const DISALLOW_SELECT = {
+    userSelect: 'none',
+    msUserSelect: 'none',
+    KhtmlUserSelect: 'none',
+    MozUserSelect: 'none'
+};
 
 class ChatDisplay extends Component {
     constructor(props) {
@@ -16,6 +32,8 @@ class ChatDisplay extends Component {
             messages: [],
             messageCount: 0,
             lastUserMessageId: null,
+            oldestMessage: this.props.firebase.getFirebaseTimestampNow(),
+            lastUpdateLoadMore: false,
 
             input: '',
             inputHeight: '30px',
@@ -24,17 +42,21 @@ class ChatDisplay extends Component {
     }
 
     componentDidMount() {
-        this._scrollToBottom();
         document.addEventListener('keydown', this._handleKeyDown);
+
         this._fetchMessages();
+        this._scrollToBottom();
     }
 
     componentDidUpdate() {
-        this._scrollToBottom();
+        if (this.state.lastUpdateLoadMore) this._scrollToTop();
+        else this._scrollToBottom();
     }
 
     componentWillUnmount() {
         document.removeEventListener('keydown', this._handleKeyDown);
+        this.listener && this.listener();
+        this.listener = null;
     }
 
     render() {
@@ -61,16 +83,45 @@ class ChatDisplay extends Component {
                 <div
                     id='message-display'
                     style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+
                         height: '100%',
-                        overflow: 'scroll'
+
+                        overflow: 'scroll',
+                        ...ALLOW_SELECT
                     }}
                 >
+
+                    {/* load more button */}
+                    {(this.state.messageCount >= MESSAGE_COUNT_LIMIT) &&
+                        <Button
+                            onClick={this._loadPastMessages}
+                            variant='outline-secondary'
+                            size='sm'
+                            style={{
+                                alignSelf: 'center',
+
+                                height: '25px',
+                                width: '70px',
+                                marginTop: '5px',
+                                marginBottom: '15px',
+
+                                fontSize: '10px',
+                                ...DISALLOW_SELECT
+                            }}
+                        >
+                            Load More
+                        </Button>
+                    }
+
                     {this.state.messages && this.state.messages.map((message, index) => {                                                 
                         const belongsToUser = Boolean(message.name === this.props.user.displayName);
                         const matchesAboveUser = Boolean((index > 0) && (message.name === this.state.messages[index - 1].name));
                         const matchesBelowUser = Boolean((index < (this.state.messageCount - 1)) && (message.name === this.state.messages[index + 1].name));
                         const largeTimeGapAbove = (index > 0) ? Boolean((message.timestamp.seconds - this.state.messages[index - 1].timestamp.seconds) >= 3600) : true;
                         const largeTimeGapBelow = (index < (this.state.messageCount - 1)) ? Boolean((this.state.messages[index + 1].timestamp.seconds - message.timestamp.seconds) >= 3600) : true;
+                        const hasLastUserTag = Boolean(belongsToUser && (this.state.lastUserMessageId === message.id))
 
                         return (
                             <div 
@@ -89,8 +140,10 @@ class ChatDisplay extends Component {
                                         style={{
                                             marginTop: '10px',
                                             marginBottom: '10px',
+
                                             fontSize: '11px',
-                                            color: '#919191'
+                                            color: '#919191',
+                                            ...DISALLOW_SELECT
                                         }}
                                     >
                                         {getFormattedDate(message.timestamp.seconds).toUpperCase()}
@@ -105,11 +158,12 @@ class ChatDisplay extends Component {
                                             alignSelf: 'flex-start',
 
                                             marginLeft: '7px',
-                                            marginTop: largeTimeGapAbove ? '5px' : '15px',
-                                            marginBottom: '4rpx',
+                                            marginTop: largeTimeGapAbove ? '5px' : '10px',
+                                            marginBottom: '3px',
 
                                             fontSize: '11px',
-                                            color: '#919191'
+                                            color: '#919191',
+                                            ...DISALLOW_SELECT
                                         }} 
                                     >
                                         {message.name}
@@ -126,7 +180,7 @@ class ChatDisplay extends Component {
                                         padding: '5px',
                                         paddingLeft: '10px',
                                         paddingRight: '10px',
-                                        marginBottom: '2px',
+                                        marginBottom: (!matchesBelowUser && !largeTimeGapBelow && !hasLastUserTag) ? '8px' : '2px',
 
                                         wordWrap: 'break-word',
                                         fontSize: isMobile ? '11px' : '12px',
@@ -135,14 +189,15 @@ class ChatDisplay extends Component {
                                         borderTopLeftRadius: (!belongsToUser && matchesAboveUser && !largeTimeGapAbove) ? '5px' : '15px',
                                         borderBottomLeftRadius: (!belongsToUser && matchesBelowUser && !largeTimeGapBelow) ? '5px' : '15px',
                                         backgroundColor: belongsToUser ? '#0078FF' : '#e9e9e9',
-                                        color: belongsToUser ? 'white' : 'black'
+                                        color: belongsToUser ? 'white' : 'black',
+                                        ...ALLOW_SELECT
                                     }}
                                 >
                                     {message.content}
                                 </div>
 
                                 {/* message status */}
-                                {belongsToUser && (this.state.lastUserMessageId === message.id) &&
+                                {hasLastUserTag &&
                                     <div
                                         key={'s-' + message.timestamp}
                                         style={{
@@ -151,7 +206,8 @@ class ChatDisplay extends Component {
                                             marginBottom: '5px',
 
                                             fontSize: '9px',
-                                            color: '#919191'
+                                            color: '#919191',
+                                            ...DISALLOW_SELECT
                                         }} 
                                     >
                                         {message.status}
@@ -180,6 +236,8 @@ class ChatDisplay extends Component {
                         backgroundColor: '#f9f9f9'
                     }}
                 >
+
+                    {/* input field */}
                     <textarea 
                         value={this.state.input}
                         onChange={this._handleInputChange}
@@ -203,6 +261,7 @@ class ChatDisplay extends Component {
                         }}
                     />
 
+                    {/* submit input button */}
                     <img 
                         onClick={this._submitMessage}
                         onMouseEnter={() => { this.setState({ sendHover: true }); }}
@@ -235,6 +294,14 @@ class ChatDisplay extends Component {
         });
     }
 
+    _scrollToTop = () => {
+        animateScroll.scrollToTop({
+            containerId: 'message-display',
+            delay: 0,
+            duration: 5000
+        });
+    }
+
     _handleKeyDown = event => {
         if (event.code === 'Enter' || event.key === 'Enter') {
             this._submitMessage();
@@ -263,16 +330,19 @@ class ChatDisplay extends Component {
             this.props.matchId,
             this.state.input
         ).then(messageId => {
+
+            // add user 'sent' message
             this.setState({
                 input: '',
                 inputHeight: '30px', 
+                lastUpdateLoadMore: false,
                 lastUserMessageId: messageId,
                 messageCount: this.state.messageCount + 1,
                 messages: this.state.messages.concat({
                     id: messageId,
                     content: this.state.input,
                     name: this.props.user.displayName,
-                    timestamp: this.props.firebase.getFirebaseTimestamp(),
+                    timestamp: this.props.firebase.getFirebaseTimestampNow(),
                     status: 'Sent'
                 })
             });
@@ -281,23 +351,64 @@ class ChatDisplay extends Component {
         });
     }
 
+    _loadPastMessages = () => {
+        const startDate = this.props.firebase.getFirebaseTimestamp(
+            this.state.oldestMessage.seconds, 
+            this.state.oldestMessage.nanoseconds - 1
+        );
+
+        this.props.setFetching(true, () => {
+            this.props.firebase.getMessageBlock(
+                this.props.current, 
+                this.props.matchId,
+                MESSAGE_COUNT_LIMIT,
+                startDate
+            ).then(messages => {
+                if (messages) {
+
+                    // prepend past messages
+                    messages.forEach(message => {
+                        this.setState({
+                            lastUpdateLoadMore: true,
+                            oldestMessage: (message.timestamp.seconds < this.state.oldestMessage.seconds) ? message.timestamp : this.state.oldestMessage,
+                            messageCount: this.state.messageCount + 1,
+                            messages: [message].concat(this.state.messages)
+                        }, () => { this.props.setFetching(false); });
+                    });
+                }
+                else throw new Error();
+            }).catch(err => {
+                this.props.setFetching(false);
+                this.props.setError('Error: Failed to fetch message data. Please wait and try again.');
+            });
+        });
+    }
+
     _fetchMessages = () => {
-        this.props.firebase.getMessages(
+        this.listener = this.props.firebase.getMessages(
             this.props.current, 
             this.props.matchId,
-            (type, id, message, start, end) => {
-                if (start) this.props.setFetching(true);
-                else if (end) this.props.setFetching(false);
+            MESSAGE_COUNT_LIMIT,
+
+            // success callback (add message)
+            (type, id, message, bulkStart, bulkEnd) => {
+                if (bulkStart) this.props.setFetching(true);
+                else if (bulkEnd) this.props.setFetching(false);
                 if ((type === 'added') || (type === 'modified'))
                     this._addMessage(id, message);
             },
+
+            // failure callback
             () => {
+                this.props.setFetching(false);
                 this.props.setError('Error: Failed to fetch message data. Please wait and try again.');
             }
         );
     }
 
     _addMessage = (id, message) => {
+
+        // add and deliver last message if 'sent'
         if (this.state.lastUserMessageId === id) {
             const index = this.state.messages.findIndex(el => el.id === id);
             const messages = [
@@ -305,11 +416,19 @@ class ChatDisplay extends Component {
                 { ...message, status: 'Delivered' },
                 ...this.state.messages.slice(index + 1)
             ];
-            this.setState({ messages: messages });
+            this.setState({
+                lastUpdateLoadMore: false,
+                oldestMessage: (message.timestamp.seconds < this.state.oldestMessage.seconds) ? message.timestamp : this.state.oldestMessage,
+                messages: messages,
+            });
         }
+
+        // add last user message
         else if (message.name === this.props.user.displayName) {
             this.setState({
+                lastUpdateLoadMore: false,
                 lastUserMessageId: id,
+                oldestMessage: (message.timestamp.seconds < this.state.oldestMessage.seconds) ? message.timestamp : this.state.oldestMessage,
                 messageCount: this.state.messageCount + 1,
                 messages: this.state.messages.concat({
                     ...message,
@@ -317,8 +436,12 @@ class ChatDisplay extends Component {
                 })
             });
         }
+
+        // add generic message 
         else {
             this.setState({
+                lastUpdateLoadMore: false,
+                oldestMessage: (message.timestamp.seconds < this.state.oldestMessage.seconds) ? message.timestamp : this.state.oldestMessage,
                 messageCount: this.state.messageCount + 1,
                 messages: this.state.messages.concat(message)
             });
