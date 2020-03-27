@@ -9,7 +9,7 @@ import { isMobile } from 'react-device-detect';
 import { getFormattedDate } from '../../util';
 import SendIcon from '../../assets/send-icon.png';
 
-const MESSAGE_COUNT_LIMIT = 10;
+const MESSAGE_COUNT_LIMIT = 50;
 
 const ALLOW_SELECT = {
     userSelect: 'text',
@@ -34,6 +34,7 @@ class ChatDisplay extends Component {
             lastUserMessageId: null,
             oldestMessage: this.props.firebase.getFirebaseTimestampNow(),
             lastUpdateLoadMore: false,
+            allowLoadMore: true,
 
             input: '',
             inputHeight: '30px',
@@ -94,7 +95,7 @@ class ChatDisplay extends Component {
                 >
 
                     {/* load more button */}
-                    {(this.state.messageCount >= MESSAGE_COUNT_LIMIT) &&
+                    {(this.state.messageCount >= MESSAGE_COUNT_LIMIT) && this.state.allowLoadMore &&
                         <Button
                             onClick={this._loadPastMessages}
                             variant='outline-secondary'
@@ -115,7 +116,7 @@ class ChatDisplay extends Component {
                         </Button>
                     }
 
-                    {this.state.messages && this.state.messages.map((message, index) => {                                                 
+                    {Boolean(this.state.messages.length) && this.state.messages.map((message, index) => {                                                 
                         const belongsToUser = Boolean(message.name === this.props.user.displayName);
                         const matchesAboveUser = Boolean((index > 0) && (message.name === this.state.messages[index - 1].name));
                         const matchesBelowUser = Boolean((index < (this.state.messageCount - 1)) && (message.name === this.state.messages[index + 1].name));
@@ -364,7 +365,7 @@ class ChatDisplay extends Component {
                 MESSAGE_COUNT_LIMIT,
                 startDate
             ).then(messages => {
-                if (messages) {
+                if (messages.length) {
 
                     // prepend past messages
                     messages.forEach(message => {
@@ -376,7 +377,10 @@ class ChatDisplay extends Component {
                         }, () => { this.props.setFetching(false); });
                     });
                 }
-                else throw new Error();
+                else {
+                    this.setState({ allowLoadMore: false });
+                    this.props.setFetching(false);
+                }
             }).catch(err => {
                 this.props.setFetching(false);
                 this.props.setError('Error: Failed to fetch message data. Please wait and try again.');
