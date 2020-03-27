@@ -126,6 +126,7 @@ class AuthMatchPage extends Component {
                         <ChatDisplay 
                             current={this.state.current}
                             matchId={this.state.matchId}
+                            setFetching={this._setFetching}
                             setError={this.props.setError}
                         />
                     }
@@ -135,7 +136,12 @@ class AuthMatchPage extends Component {
         );
     }
 
-    _setStateAsync(state) {
+    _setFetching = (state, callback) => {
+        if (callback) this.setState({ fetching: state }, callback);
+        else this.setState({ fetching: state });
+    }
+
+    _setStateAsync = (state) => {
         return new Promise((resolve) => {
             this.setState(state, resolve);
         });

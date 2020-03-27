@@ -143,14 +143,24 @@ class Firebase {
         const messagesRef = this.db.collection('matchings').doc(current)
             .collection('matches').doc(matchId).collection('messages');
         messagesRef.orderBy('timestamp', 'desc').limit(50).onSnapshot(snapshot => {
-            snapshot.docChanges().reverse().forEach(change => {
-                if ((change.type === 'added' || change.type === 'modified')) {
-                    if (change.doc.exists) {
-                        const message = change.doc.data();
-                        if (message.timestamp) onSuccess(change.doc.id, message);
-                    }
-                    else onFailure();
+            const changes = snapshot.docChanges().reverse();
+            const bulk = Boolean(changes.length > 5);
+
+            changes.forEach((change, index) => {
+                if (change.doc.exists) {
+                    const message = change.doc.data();
+                    const bulkStart = bulk && (index === 0);
+                    const bulkEnd = bulk && (index === changes.length - 1);
+
+                    if (message.timestamp) onSuccess(
+                        change.type,
+                        change.doc.id, 
+                        message,
+                        bulkStart,
+                        bulkEnd
+                    );
                 }
+                else onFailure();
             });
         });
     }

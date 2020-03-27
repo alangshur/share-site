@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { animateScroll } from 'react-scroll';
 import './style.css';
 
 import { withFirebase } from '../firebase';
@@ -23,8 +24,13 @@ class ChatDisplay extends Component {
     }
 
     componentDidMount() {
+        this._scrollToBottom();
         document.addEventListener('keydown', this._handleKeyDown);
         this._fetchMessages();
+    }
+
+    componentDidUpdate() {
+        this._scrollToBottom();
     }
 
     componentWillUnmount() {
@@ -53,7 +59,7 @@ class ChatDisplay extends Component {
 
                 {/* messages */}
                 <div
-                    onLoad={() => { console.log('loaded' )}}
+                    id='message-display'
                     style={{
                         height: '100%',
                         overflow: 'scroll'
@@ -81,7 +87,7 @@ class ChatDisplay extends Component {
                                     <div
                                         key={'t-' + message.id}
                                         style={{
-                                            marginTop: '15px',
+                                            marginTop: '10px',
                                             marginBottom: '10px',
                                             fontSize: '11px',
                                             color: '#919191'
@@ -99,7 +105,8 @@ class ChatDisplay extends Component {
                                             alignSelf: 'flex-start',
 
                                             marginLeft: '7px',
-                                            marginBottom: '5px',
+                                            marginTop: largeTimeGapAbove ? '5px' : '15px',
+                                            marginBottom: '4rpx',
 
                                             fontSize: '11px',
                                             color: '#919191'
@@ -118,15 +125,15 @@ class ChatDisplay extends Component {
                                         maxWidth: isMobile ? '235px' : '350px',
                                         padding: '5px',
                                         paddingLeft: '10px',
-                                        paddingRight: '12px',
+                                        paddingRight: '10px',
                                         marginBottom: '2px',
 
                                         wordWrap: 'break-word',
                                         fontSize: isMobile ? '11px' : '12px',
-                                        borderTopRightRadius: (belongsToUser && matchesAboveUser && !largeTimeGapAbove) ? '3px' : '15px',
-                                        borderBottomRightRadius: (belongsToUser && matchesBelowUser && !largeTimeGapBelow) ? '3px' : '15px',
-                                        borderTopLeftRadius: (!belongsToUser && matchesAboveUser && !largeTimeGapAbove) ? '3px' : '15px',
-                                        borderBottomLeftRadius: (!belongsToUser && matchesBelowUser && !largeTimeGapBelow) ? '3px' : '15px',
+                                        borderTopRightRadius: (belongsToUser && matchesAboveUser && !largeTimeGapAbove) ? '5px' : '15px',
+                                        borderBottomRightRadius: (belongsToUser && matchesBelowUser && !largeTimeGapBelow) ? '5px' : '15px',
+                                        borderTopLeftRadius: (!belongsToUser && matchesAboveUser && !largeTimeGapAbove) ? '5px' : '15px',
+                                        borderBottomLeftRadius: (!belongsToUser && matchesBelowUser && !largeTimeGapBelow) ? '5px' : '15px',
                                         backgroundColor: belongsToUser ? '#0078FF' : '#e9e9e9',
                                         color: belongsToUser ? 'white' : 'black'
                                     }}
@@ -137,7 +144,7 @@ class ChatDisplay extends Component {
                                 {/* message status */}
                                 {belongsToUser && (this.state.lastUserMessageId === message.id) &&
                                     <div
-                                        key={'status' + message.timestamp}
+                                        key={'s-' + message.timestamp}
                                         style={{
                                             alignSelf: 'flex-end',
                                             marginRight: '7px',
@@ -220,6 +227,14 @@ class ChatDisplay extends Component {
         );
     }
 
+    _scrollToBottom = () => {
+        animateScroll.scrollToBottom({
+            containerId: 'message-display',
+            delay: 0,
+            duration: 300
+        });
+    }
+
     _handleKeyDown = event => {
         if (event.code === 'Enter' || event.key === 'Enter') {
             this._submitMessage();
@@ -270,38 +285,44 @@ class ChatDisplay extends Component {
         this.props.firebase.getMessages(
             this.props.current, 
             this.props.matchId,
-            (id, message) => {
-                if (this.state.lastUserMessageId === id) {
-                    const index = this.state.messages.findIndex(el => el.id === id);
-                    const messages = [
-                        ...this.state.messages.slice(0, index), 
-                        { ...message, status: 'Delivered' },
-                        ...this.state.messages.slice(index + 1)
-                    ];
-
-                    this.setState({ messages: messages });
-                }
-                else if (message.name === this.props.user.displayName) {
-                    this.setState({
-                        lastUserMessageId: id,
-                        messageCount: this.state.messageCount + 1,
-                        messages: this.state.messages.concat({
-                            ...message,
-                            status: 'Delivered'
-                        })
-                    });
-                }
-                else {
-                    this.setState({
-                        messageCount: this.state.messageCount + 1,
-                        messages: this.state.messages.concat(message)
-                    });
-                }
+            (type, id, message, start, end) => {
+                if (start) this.props.setFetching(true);
+                else if (end) this.props.setFetching(false);
+                if ((type === 'added') || (type === 'modified'))
+                    this._addMessage(id, message);
             },
             () => {
                 this.props.setError('Error: Failed to fetch message data. Please wait and try again.');
             }
         );
+    }
+
+    _addMessage = (id, message) => {
+        if (this.state.lastUserMessageId === id) {
+            const index = this.state.messages.findIndex(el => el.id === id);
+            const messages = [
+                ...this.state.messages.slice(0, index), 
+                { ...message, status: 'Delivered' },
+                ...this.state.messages.slice(index + 1)
+            ];
+            this.setState({ messages: messages });
+        }
+        else if (message.name === this.props.user.displayName) {
+            this.setState({
+                lastUserMessageId: id,
+                messageCount: this.state.messageCount + 1,
+                messages: this.state.messages.concat({
+                    ...message,
+                    status: 'Delivered'
+                })
+            });
+        }
+        else {
+            this.setState({
+                messageCount: this.state.messageCount + 1,
+                messages: this.state.messages.concat(message)
+            });
+        }
     }
 }
 
