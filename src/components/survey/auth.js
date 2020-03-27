@@ -246,8 +246,8 @@ class AuthSurveyPage extends Component {
                 }
 
                 // validate field answers
-                if (isNaN(this.state.age) || (Number(this.state.age) < 12) || (Number(this.state.age) > 110))
-                    throw new Error('Please enter a valid age in years (12 to 110 years).');
+                if (isNaN(this.state.age) || (Number(this.state.age) < 16) || (Number(this.state.age) > 109))
+                    throw new Error('Please enter a valid age in years.');
                 if (!this.state.country) throw new Error('Please select a valid country from dropdown.');
                 if (!this.state.region) throw new Error('Please select a valid region from dropdown.');
 

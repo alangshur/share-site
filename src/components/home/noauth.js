@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 
-import LoadingSpinner from 'react-loader-spinner';
+import LoadingSpinner from '../../loading';
 import { withFirebase } from '../firebase';
 import { formatTimeFromMs } from '../../util';
 
@@ -11,7 +11,7 @@ class NoAuthHomeDisplay extends Component {
         this.state = {
             fetching: true,
 
-            userCount: null,
+            signupCount: null,
             timeLeft: null
         }
     }
@@ -99,8 +99,8 @@ class NoAuthHomeDisplay extends Component {
                             
                             People In Next Matching:&nbsp;
                             <b>
-                                {this.state.userCount ?
-                                    this.state.userCount.toLocaleString() :
+                                {this.state.signupCount ?
+                                    this.state.signupCount.toLocaleString() :
                                     '--'
                                 }
                             </b>
@@ -136,7 +136,7 @@ class NoAuthHomeDisplay extends Component {
                 this.timeout = setTimeout(this._updateTimeLeft, 1000);
                 this.timeout2 = setTimeout(window.location.reload.bind(window.location), timeLeft);
                 this.setState({
-                    userCount: matching.userCount,
+                    signupCount: matching.signupCount,
                     timeLeft: timeLeft
                 });
             }

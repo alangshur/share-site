@@ -27,6 +27,17 @@ export function formatTimeFromMs(ms) {
     }
 }   
 
+// get millis until next matching
+export function getNextMatchingMs() {
+    var now = new Date();    
+    now.setUTCDate(now.getUTCDate() + (12 - now.getUTCDay()) % 7);
+    now.setUTCHours(24);
+    now.setUTCMinutes(0);
+    now.setUTCSeconds(0);
+    now.setUTCMilliseconds(0);
+    return now.getTime() - Date.now();
+}
+
 // get start day of next matching (deadline)
 export function getNextMatchingDate() {
     var now = new Date();    

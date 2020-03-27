@@ -18,7 +18,7 @@ class AuthHomeDisplay extends Component {
         this.state = {
             fetching: true,
 
-            userCount: null,
+            signupCount: null,
             timeLeft: null,
 
             hasCurrentMatch: false,
@@ -42,9 +42,6 @@ class AuthHomeDisplay extends Component {
     componentWillUnmount() {
         this.timeout && clearTimeout(this.timeout);
         this.timeout = null;
-
-        this.timeout2 && clearTimeout(this.timeout2);
-        this.timeout2 = null;
     }
 
     render() {
@@ -180,8 +177,8 @@ class AuthHomeDisplay extends Component {
                             
                             People In Next Matching:&nbsp;
                             <b>
-                                {this.state.userCount ?
-                                    this.state.userCount.toLocaleString() :
+                                {this.state.signupCount ?
+                                    this.state.signupCount.toLocaleString() :
                                     '--'
                                 }
                             </b>
@@ -257,11 +254,9 @@ class AuthHomeDisplay extends Component {
         return this.props.firebase.getNextMatching().then(matching => {
             if (matching && (this.timeout !== null)) {
                 const timeLeft = matching.deadline.toMillis() - Date.now();
-
                 this.timeout = setTimeout(this._updateTimeLeft, 1000);
-                this.timeout2 = setTimeout(window.location.reload.bind(window.location), timeLeft);
                 this.setState({
-                    userCount: matching.userCount,
+                    signupCount: matching.signupCount,
                     timeLeft: timeLeft
                 });
             }

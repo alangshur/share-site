@@ -5,6 +5,7 @@ import AuthHomeDisplay from './auth';
 import NoAuthHomeDisplay from './noauth';
 import LoadingSpinner from '../../loading';
 import { withSession } from '../session';
+import { getNextMatchingMs } from '../../util';
 
 class HomePage extends Component {
     constructor(props) {
@@ -12,11 +13,17 @@ class HomePage extends Component {
         this.state = {
             error: ''
         };
+
+        const timeLeft = getNextMatchingMs();
+        this.timeout2 = setTimeout(window.location.reload.bind(window.location), timeLeft);
     }
 
     componentWillUnmount() {
         this.timeout && clearTimeout(this.timeout);
         this.timeout = null;
+
+        this.timeout2 && clearTimeout(this.timeout2);
+        this.timeout2 = null;
     }
 
     render() {
