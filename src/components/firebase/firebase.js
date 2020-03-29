@@ -101,7 +101,7 @@ class Firebase {
 
     submitSurveyAnswers = (survey, age, country, region) => {
         return this.getUser().getIdToken().then(token => {
-            return fetch(FUNCTIONS_URL + 'updateSurvey', {
+            return fetch(FUNCTIONS_URL + 'submitSurvey', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

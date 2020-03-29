@@ -206,7 +206,7 @@ class ChatDisplay extends Component {
                                             marginRight: '7px',
                                             marginBottom: '5px',
 
-                                            fontSize: '9px',
+                                            fontSize: '10px',
                                             color: '#919191',
                                             ...DISALLOW_SELECT
                                         }} 
@@ -258,7 +258,7 @@ class ChatDisplay extends Component {
                             backgroundColor: '#e9e9e9',
                             fontSize: '13px',
                             borderWidth: '0px',
-                            outlineWidth: '0px',
+                            outline: 'none',
                         }}
                     />
 

@@ -87,7 +87,8 @@ class AuthHomeDisplay extends Component {
                                 width: '360px',
                                 marginBottom: '35px',
                                 
-                                fontSize: '14px'
+                                fontSize: '14px',
+                                cursor: this.state.algorithmRunning ? 'default' : 'pointer'
                             }}
                         >
 
@@ -98,22 +99,22 @@ class AuthHomeDisplay extends Component {
                                     <Loader
                                         type='Oval'
                                         color='black'
-                                        height={25}
-                                        width={25}
+                                        height={23}
+                                        width={23}
                                         style={{ 
                                             position: 'absolute',
 
                                             top: '4px',
                                             left: '9px',
-                                            marginRight: '50px' 
+                                            marginRight: '50px',
                                         }}
                                     />
 
-                                    <div>Computing matches... Check back soon!</div>
+                                    <div>Computing matches...</div>
                                 </> :
 
                                 <>
-                                    <div>Go to Current Match</div>
+                                    <div>Go to Your Match</div>
 
                                     {/* button arrow */}
                                     <div    
@@ -157,14 +158,16 @@ class AuthHomeDisplay extends Component {
 
                         {/* join button */}
                         <Button
+                            disabled={this.state.hasNextMatch}
                             onClick={() => this.props.history.push('/survey')}
                             size='sm'
                             variant='secondary'
                             style={{
-                                width: '210px'
+                                width: '210px',
+                                cursor: this.state.hasNextMatch ? 'default' : 'pointer'
                             }}
                         >
-                            {this.state.hasNextMatch ? 'Edit Your Answers' : 'Join Next Matching'}
+                            {this.state.hasNextMatch ? 'You\'ve joined!' : 'Join Next Matching'}
                         </Button>
 
                         {/* next matching count */}
