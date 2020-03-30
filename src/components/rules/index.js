@@ -3,14 +3,6 @@ import { Button } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 
 class RulesPage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            signupCount: null,
-            timeLeft: null
-        }
-    }
-
     render() {
         return (
             <div

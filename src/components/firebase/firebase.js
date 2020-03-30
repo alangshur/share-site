@@ -46,6 +46,7 @@ class Firebase {
     }
 
 
+    
     /*** AUTH API ***/
 
     doSignIn = () => {
@@ -67,6 +68,7 @@ class Firebase {
     getUserData = () => {
         const id = this.getUser().uid;
         const userRef = this.db.collection('users').doc(id);
+        
         return userRef.get().then(user => {
             if (user.exists) return user.data();
             else return null;
@@ -80,6 +82,7 @@ class Firebase {
     getNextMatching = () => {
         const date = getNextMatchingDate();
         const matchingRef = this.db.collection('matchings').doc(date);
+
         return matchingRef.get().then(matching => {
             if (matching.exists) return matching.data();
             else return null;
@@ -89,6 +92,7 @@ class Firebase {
     getCurrentMatching = () => {
         const date = getCurrentMatchingDate();
         const matchingRef = this.db.collection('matchings').doc(date);
+
         return matchingRef.get().then(matching => {
             if (matching.exists) return matching.data();
             else return null;
@@ -123,6 +127,7 @@ class Firebase {
         const current = getCurrentMatchingDate();
         const matchRef = this.db.collection('matchings').doc(current)
             .collection('matches').doc(matchId);
+
         return matchRef.get().then(match => {
             if (match.exists) return match.data();
             else return null;
@@ -132,6 +137,7 @@ class Firebase {
     getMessageBlock = (current, matchId, limit, startTime) => {
         const messagesRef = this.db.collection('matchings').doc(current)
             .collection('matches').doc(matchId).collection('messages');
+
         return messagesRef.orderBy('timestamp', 'desc').startAt(startTime)
             .limit(limit).get().then(data => {
             var messages = [];
@@ -147,6 +153,7 @@ class Firebase {
     getMessages = (current, matchId, limit, onSuccess, onFailure) => {
         const messagesRef = this.db.collection('matchings').doc(current)
             .collection('matches').doc(matchId).collection('messages');
+
         messagesRef.orderBy('timestamp', 'desc').limit(limit).onSnapshot(snapshot => {
             const changes = snapshot.docChanges().reverse();
             const bulk = Boolean(changes.length > 10);
@@ -173,6 +180,7 @@ class Firebase {
         const messageId = uuid();
         const messageRef = this.db.collection('matchings').doc(current)
             .collection('matches').doc(matchId).collection('messages').doc(messageId);
+
         return messageRef.set({
             id: messageId,
             name: this.getUser().displayName,

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
+import { withRouter } from 'react-router-dom';
 
 import LoadingSpinner from '../../loading';
 import { withFirebase } from '../firebase';
@@ -69,7 +70,7 @@ class NoAuthHomeDisplay extends Component {
                             alignItems: 'center',
 
                             width: '325px',
-                            height: '170px',
+                            height: '250px',
 
                             borderRadius: '5px',
                             backgroundColor: '#f9f9f9',
@@ -80,8 +81,8 @@ class NoAuthHomeDisplay extends Component {
                         {/* join button */}
                         <Button
                             onClick={this.props.firebase.doSignIn}
-                            size='sm'
                             variant='secondary'
+                            size='sm'
                             style={{
                                 width: '210px'
                             }}
@@ -89,11 +90,24 @@ class NoAuthHomeDisplay extends Component {
                             Join with Google
                         </Button>
 
+                        {/* rules button */}
+                        <Button
+                            onClick={() => { this.props.history.push('/rules'); }}
+                            variant='secondary'
+                            size='sm'
+                            style={{
+                                width: '210px',
+                                marginTop: '20px'
+                            }}
+                        >
+                            How does this work?
+                        </Button>
+
                         {/* next matching count */}
                         <div
                             style={{
                                 marginTop: '40px',
-                                fontSize: '14px'
+                                fontSize: '14px',
                             }}
                         >
                             
@@ -154,4 +168,4 @@ class NoAuthHomeDisplay extends Component {
     }
 }
 
-export default withFirebase(NoAuthHomeDisplay);
+export default withRouter(withFirebase(NoAuthHomeDisplay));

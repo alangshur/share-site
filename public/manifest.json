@@ -1,0 +1,13 @@
+{
+    "manifest_version": "1",
+    "name": "Share Site",
+    "short_name": "Share Site",
+    "author": "Alex Langshur",
+    "version": "1.0",
+    "icons": [],
+    "start_url": "./index.html",
+    "orientation": "portrait",
+    "display": "standalone",
+    "theme_color": "#f9f9f9",
+    "background_color": "#ffffff"
+}
