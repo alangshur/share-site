@@ -64,7 +64,7 @@ class AuthSurveyPage extends Component {
                 >
 
                     {/* title */}
-                    <div
+                    <b
                         style={{
                             display: 'flex',
                             alignContent: 'center',
@@ -72,12 +72,12 @@ class AuthSurveyPage extends Component {
                             width: '315px',
                             marginBottom: '100px',
                             
-                            fontSize: '20px',
+                            fontSize: '18px',
                             textAlign: 'center'
                         }}
                     >
                         15 Questions to Find the Most Similar Match in the World
-                    </div>
+                    </b>
 
                     {/* survey questions */}
                     <SurveyQuestion

@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import LoadingSpinner from '../../loading';
 import { withFirebase } from '../firebase';
 import { formatTimeFromMs } from '../../util';
+import HomeIcon from '../../assets/icon.png';
 
 class NoAuthHomeDisplay extends Component {
     constructor(props) {
@@ -61,12 +62,32 @@ class NoAuthHomeDisplay extends Component {
                         color: '#36454F'
                     }}
                 >
+                    
+                    {/* logo */}
+                    <img 
+                        src={HomeIcon}
+                        alt='Home Icon'
+                        unselectable={"on"}
+                        style={{
+                            width: '115px',
+                            height: '115px',
+                            marginBottom: '15px',
+                            
+                            opacity: '0.85'
+                        }}
+                    />
 
                     {/* title */}
                     <div
                         style={{
-                            marginBottom: '75px',
-                            fontSize: '22px'
+                            width: '165px',
+                            marginBottom: '60px',
+
+                            lineHeight: '22px',
+                            letterSpacing: '1px',
+                            fontSize: '20px',
+                            textAlign: 'center',
+                            fontWeight: 600
                         }}
                     >
                         The Global Matching Project
