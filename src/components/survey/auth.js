@@ -70,13 +70,13 @@ class AuthSurveyPage extends Component {
                             alignContent: 'center',
 
                             width: '315px',
-                            marginBottom: '70px',
+                            marginBottom: '100px',
                             
                             fontSize: '20px',
                             textAlign: 'center'
                         }}
                     >
-                        15 Questions to Find the Most Similar Matches in the World
+                        15 Questions to Find the Most Similar Match in the World
                     </div>
 
                     {/* survey questions */}

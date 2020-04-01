@@ -30,7 +30,7 @@ class SurveyQuestion extends Component {
                     flexDirection: 'column',
 
                     width: isMobile ? '290px' : '400px',
-                    marginBottom: '150px',
+                    marginBottom: '200px',
                 }}
             >
                 <div 

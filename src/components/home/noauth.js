@@ -51,6 +51,7 @@ class NoAuthHomeDisplay extends Component {
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
+                        flexDirection: 'column',
 
                         top: 0,
                         left: 0,
@@ -60,6 +61,16 @@ class NoAuthHomeDisplay extends Component {
                         color: '#36454F'
                     }}
                 >
+
+                    {/* title */}
+                    <div
+                        style={{
+                            marginBottom: '75px',
+                            fontSize: '22px'
+                        }}
+                    >
+                        The Global Matching Project
+                    </div>
 
                     {/* center console */}
                     <div

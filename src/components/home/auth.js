@@ -70,6 +70,16 @@ class AuthHomeDisplay extends Component {
                     }}
                 >
 
+                    {/* title */}
+                    <div
+                        style={{
+                            marginBottom: '75px',
+                            fontSize: '22px'
+                        }}
+                    >
+                        The Global Matching Project
+                    </div>
+
                     {/* matching button */}
                     {this.state.hasCurrentMatch &&
                         <Button
