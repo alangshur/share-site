@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Slider from 'rc-slider';
+import { isMobile } from 'react-device-detect';
 import 'rc-slider/assets/index.css';
 
 class SurveyQuestion extends Component {
@@ -28,17 +29,18 @@ class SurveyQuestion extends Component {
                     alignItems: 'center',
                     flexDirection: 'column',
 
-                    width: '300px',
+                    width: isMobile ? '290px' : '400px',
                     marginBottom: '150px',
                 }}
             >
                 <div 
-                    style={{ 
-                        width: '350px', 
+                    style={{
+                        width: isMobile ? '350px' : '400px', 
                         marginBottom: '25px', 
                         
+                        fontSize: isMobile ? '15px' : '16px',
                         fontStyle: this.state.edited ? '' : 'italic' 
-                    }}
+                    }} 
                 >
                     <b>Question {this.props.num + 1}: </b>
                     {this.props.prompt}
@@ -50,12 +52,12 @@ class SurveyQuestion extends Component {
                     min={0}
                     max={10}
                     marks={{
-                        0: <div style={{ width: '70px', fontSize: '13px', color: 'grey' }}>{this.props.zeroPrompt}</div>,
+                        0: <div style={{ width: '90px', fontSize: '13px', color: 'grey' }}>{this.props.zeroPrompt}</div>,
                         2: '2', 
                         4: '4',
                         6: '6',
                         8: '8', 
-                        10: <div style={{ width: '70px', fontSize: '13px', color: 'grey' }}>{this.props.tenPrompt}</div>
+                        10: <div style={{ width: '90px', fontSize: '13px', color: 'grey' }}>{this.props.tenPrompt}</div>
                     }}
                     style={{ width: '100%' }}
                 />

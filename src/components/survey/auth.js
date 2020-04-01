@@ -69,50 +69,149 @@ class AuthSurveyPage extends Component {
                             display: 'flex',
                             alignContent: 'center',
 
-                            width: '300px',
+                            width: '315px',
                             marginBottom: '70px',
                             
-                            fontSize: '22px',
+                            fontSize: '20px',
                             textAlign: 'center'
                         }}
                     >
-                        Answer Each Question & Submit at Bottom
+                        15 Questions to Find the Most Similar Matches in the World
                     </div>
 
                     {/* survey questions */}
                     <SurveyQuestion
                         num={0}
                         initValue={(this.state['0'] === -1) ? 0 : this.state['0']}
-                        prompt={'Do you plan on raising your chidlren as religious?'}
-                        zeroPrompt={'They can decide for themselves.'}
-                        tenPrompt={'Orthodox all the way!'}
+                        prompt={'The collective wellbeing of mankind is more important than my own wellbeing.'}
+                        zeroPrompt={'No way. My needs come first!'}
+                        tenPrompt={'Of course! I serve the people.'}
                         update={this._updateResponseValue}
                     />
 
                     <SurveyQuestion
                         num={1}
                         initValue={(this.state['1'] === -1) ? 0 : this.state['1']}
-                        prompt={'Do you plan on raising your chidlren as religious?'}
-                        zeroPrompt={'They can decide for themselves.'}
-                        tenPrompt={'Orthodox all the way!'}
+                        prompt={'I get quickly involved in social circles at new jobs.'}
+                        zeroPrompt={'Ugh. I hate office parties.'}
+                        tenPrompt={'I know all the drama.'}
                         update={this._updateResponseValue}
                     />
 
                     <SurveyQuestion
                         num={2}
                         initValue={(this.state['2'] === -1) ? 0 : this.state['2']}
-                        prompt={'Do you plan on raising your chidlren as religious?'}
-                        zeroPrompt={'They can decide for themselves.'}
-                        tenPrompt={'Orthodox all the way!'}
+                        prompt={'I\'m happy to be alive.'}
+                        zeroPrompt={'Not really. Life is overrated.'}
+                        tenPrompt={'Life is positively fantastic.'}
                         update={this._updateResponseValue}
                     />
 
                     <SurveyQuestion
                         num={3}
                         initValue={(this.state['3'] === -1) ? 0 : this.state['3']}
-                        prompt={'Do you plan on raising your chidlren as religious?'}
+                        prompt={'Rationality is more powerful than intuition.'}
+                        zeroPrompt={'Incorrect. I never overthink.'}
+                        tenPrompt={'Yes. Being logical is a way of life.'}
+                        update={this._updateResponseValue}
+                    />
+
+                    <SurveyQuestion
+                        num={4}
+                        initValue={(this.state['4'] === -1) ? 0 : this.state['4']}
+                        prompt={'I believe there is some god-like being with a plan.'}
+                        zeroPrompt={'Zero chance. That\'s silly.'}
+                        tenPrompt={'Not a doubt in my mind.'}
+                        update={this._updateResponseValue}
+                    />
+
+                    <SurveyQuestion
+                        num={5}
+                        initValue={(this.state['5'] === -1) ? 0 : this.state['5']}
+                        prompt={'I often make sacrifices for the greater good.'}
+                        zeroPrompt={'No. Not my responsibility.'}
+                        tenPrompt={'Yep. Everyone should help out!'}
+                        update={this._updateResponseValue}
+                    />
+
+                    <SurveyQuestion
+                        num={6}
+                        initValue={(this.state['6'] === -1) ? 0 : this.state['6']}
+                        prompt={'I\'m completely comfortable being the center of attention.'}
+                        zeroPrompt={'That\'s my least favorite thing.'}
+                        tenPrompt={'Of course. I\'m a social leader.'}
+                        update={this._updateResponseValue}
+                    />
+
+                    <SurveyQuestion
+                        num={7}
+                        initValue={(this.state['7'] === -1) ? 0 : this.state['7']}
+                        prompt={'"Survival of the Fittest" is a better economic model than "One for All and All for One".'}
+                        zeroPrompt={'No. We\'re here to help each other.'}
+                        tenPrompt={'For sure. The world must be competitive.'}
+                        update={this._updateResponseValue}
+                    />
+
+                    <SurveyQuestion
+                        num={8}
+                        initValue={(this.state['8'] === -1) ? 0 : this.state['8']}
+                        prompt={'I\'m generally less anxious than my friends.'}
+                        zeroPrompt={'I stress over everything.'}
+                        tenPrompt={'100%! I\'m as calm as a cat.'}
+                        update={this._updateResponseValue}
+                    />
+
+                    <SurveyQuestion
+                        num={9}
+                        initValue={(this.state['9'] === -1) ? 0 : this.state['9']}
+                        prompt={'I rarely let gut feeling guide my decisions.'}
+                        zeroPrompt={'Not me. I have great instinct.'}
+                        tenPrompt={'Trusting your gut is irresponsible.'}
+                        update={this._updateResponseValue}
+                    />
+
+                    <SurveyQuestion
+                        num={10}
+                        initValue={(this.state['10'] === -1) ? 0 : this.state['10']}
+                        prompt={'It\'s my responsibility to share with the less fortunate.'}
+                        zeroPrompt={'Says who? That\'s stupid.'}
+                        tenPrompt={'No doubt! I\'ll share everything.'}
+                        update={this._updateResponseValue}
+                    />
+
+                    <SurveyQuestion
+                        num={11}
+                        initValue={(this.state['11'] === -1) ? 0 : this.state['11']}
+                        prompt={'I plan on raising (or have raised) my children with religion.'}
                         zeroPrompt={'They can decide for themselves.'}
                         tenPrompt={'Orthodox all the way!'}
+                        update={this._updateResponseValue}
+                    />
+
+                    <SurveyQuestion
+                        num={12}
+                        initValue={(this.state['12'] === -1) ? 0 : this.state['12']}
+                        prompt={'I recharge by being around others.'}
+                        zeroPrompt={'Nope. I need to isolate.'}
+                        tenPrompt={'My social energy is always high.'}
+                        update={this._updateResponseValue}
+                    />
+
+                    <SurveyQuestion
+                        num={13}
+                        initValue={(this.state['13'] === -1) ? 0 : this.state['13']}
+                        prompt={'People should be self-reliant and not depend on the government.'}
+                        zeroPrompt={'No. That\'s a recipe for disaster.'}
+                        tenPrompt={'Yep. To each their own.'}
+                        update={this._updateResponseValue}
+                    />
+
+                    <SurveyQuestion
+                        num={14}
+                        initValue={(this.state['14'] === -1) ? 0 : this.state['14']}
+                        prompt={'Worrying about the meaning of life is pointless.'}
+                        zeroPrompt={'No. It\'s the mark of a great thinker.'}
+                        tenPrompt={'Philosophy is dumb.'}
                         update={this._updateResponseValue}
                     />
 
