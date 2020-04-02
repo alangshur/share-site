@@ -2,15 +2,16 @@ import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 import { withRouter } from 'react-router-dom';
 import Loader from 'react-loader-spinner';
+import { isMobile } from 'react-device-detect';
 
 import LoadingSpinner from '../../loading';
 import { withSession } from '../session';
 import { withFirebase } from '../firebase';
 import HomeIcon from '../../assets/icon.png';
-import { 
-    formatTimeFromMs, 
-    getNextMatchingDate, 
-    getCurrentMatchingDate 
+import {
+    formatTimeFromMs,
+    getNextMatchingDate,
+    getCurrentMatchingDate
 } from '../../util';
 
 class AuthHomeDisplay extends Component {
@@ -33,9 +34,9 @@ class AuthHomeDisplay extends Component {
             this._fetchNextMatching()
                 .then(this._fetchUserMatchingData)
                 .then(() => { this.setState({ fetching: false }); })
-                .catch(err => { 
+                .catch(err => {
                     this.setState({ fetching: false });
-                    this.props.setError('Error: Failed to contact servers.'); 
+                    this.props.setError('Error: Failed to contact servers.');
                 });
         });
     }
@@ -50,7 +51,7 @@ class AuthHomeDisplay extends Component {
             <>
 
                 {/* loading icon */}
-                {this.state.fetching && 
+                {this.state.fetching &&
                     <LoadingSpinner />
                 }
 
@@ -72,7 +73,8 @@ class AuthHomeDisplay extends Component {
                 >
 
                     {/* logo */}
-                    <img 
+                    <img
+                        onDragStart={this._preventDragHandler}
                         src={HomeIcon}
                         alt='Home Icon'
                         unselectable={"on"}
@@ -80,7 +82,7 @@ class AuthHomeDisplay extends Component {
                             width: '115px',
                             height: '115px',
                             marginBottom: '15px',
-                            
+
                             opacity: '0.85'
                         }}
                     />
@@ -89,7 +91,7 @@ class AuthHomeDisplay extends Component {
                     <div
                         style={{
                             width: '165px',
-                            marginBottom: '60px',
+                            marginBottom: isMobile ? '40px' : '60px',
 
                             lineHeight: '22px',
                             letterSpacing: '1px',
@@ -117,7 +119,7 @@ class AuthHomeDisplay extends Component {
                                 height: '35px',
                                 width: '360px',
                                 marginBottom: '35px',
-                                
+
                                 fontSize: '14px',
                                 cursor: this.state.algorithmRunning ? 'default' : 'pointer'
                             }}
@@ -132,7 +134,7 @@ class AuthHomeDisplay extends Component {
                                         color='black'
                                         height={23}
                                         width={23}
-                                        style={{ 
+                                        style={{
                                             position: 'absolute',
 
                                             top: '4px',
@@ -148,7 +150,7 @@ class AuthHomeDisplay extends Component {
                                     <div>Go to Your Match</div>
 
                                     {/* button arrow */}
-                                    <div    
+                                    <div
                                         style={{
                                             position: 'absolute',
 
@@ -208,7 +210,7 @@ class AuthHomeDisplay extends Component {
                                 fontSize: '14px'
                             }}
                         >
-                            
+
                             People In Next Matching:&nbsp;
                             <b>
                                 {this.state.signupCount ?
@@ -313,10 +315,7 @@ class AuthHomeDisplay extends Component {
                     algorithmRunning: hasCurrentMatch && (user.currentMatching !== current)
                 });
             }
-            else if (this.timeout !== null) {
-                this.props.setError('Error: Failed to fetch user data.');
-            }
-        }); 
+        });
     }
 
     _updateTimeLeft = () => {
@@ -324,6 +323,10 @@ class AuthHomeDisplay extends Component {
         const timeLeft = this.state.timeLeft - 1000;
         if (timeLeft > 0) this.setState({ timeLeft: timeLeft });
         else this.setState({ timeLeft: 'Just missed it!' });
+    }
+
+    _preventDragHandler = (e) => {
+        e.preventDefault();
     }
 }
 

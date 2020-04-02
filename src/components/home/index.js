@@ -30,10 +30,12 @@ class HomePage extends Component {
         return (
             <div
                 style={{
+                    cursor: 'default',
                     userSelect: 'none',
                     msUserSelect: 'none',
                     KhtmlUserSelect: 'none',
-                    MozUserSelect: 'none'
+                    MozUserSelect: 'none',
+                    WebkitUserSelect: 'none'
                 }}
             >
 

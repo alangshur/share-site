@@ -17,10 +17,12 @@ class LoadingSpinner extends Component {
                     height: '100%',
                     width: '100%',
 
+                    cursor: 'default',
                     userSelect: 'none',
                     msUserSelect: 'none',
                     KhtmlUserSelect: 'none',
                     MozUserSelect: 'none',
+                    WebkitUserSelect: 'none',
                     overflow: 'hidden',
                     backdropFilter: 'blur(2px)'
                 }}

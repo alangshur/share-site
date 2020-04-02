@@ -113,7 +113,7 @@ class AuthMatchPage extends Component {
                                             margin: '15px',
                                             fontSize: '13px'
                                         }}
-                                    >       
+                                    >
                                         <div><b>{user.name}</b>, {user.age}</div>
                                         <div>{user.region}, {user.country}</div>
                                     </div>

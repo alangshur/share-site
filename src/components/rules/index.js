@@ -18,11 +18,13 @@ class RulesPage extends Component {
                     width: '100%',
 
                     color: '#36454F',
+                    cursor: 'default',
                     userSelect: 'none',
                     msUserSelect: 'none',
                     KhtmlUserSelect: 'none',
                     MozUserSelect: 'none',
-                    overflow: 'scroll'
+                    overflow: 'scroll',
+                    WebkitUserSelect: 'none'
                 }}
             >
 

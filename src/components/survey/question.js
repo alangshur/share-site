@@ -40,7 +40,7 @@ class SurveyQuestion extends Component {
 
                 <div 
                     onClick={this._onClick}
-                    style={{ width: '100%' }}
+                    style={{ width: '100%', cursor: 'pointer' }}
                 >
                     <Slider
                         value={this.state.value}

@@ -55,7 +55,7 @@ class AuthSurveyPage extends Component {
 
                     top: 0,
                     left: 0,
-                    height: '100%',
+                    height: 'auto',
                     width: '100%',
                     paddingTop: '50px',
                     paddingBottom: '50px',
@@ -265,11 +265,13 @@ class AuthSurveyPage extends Component {
                                 width: '300px', 
                                 height: '38px',
 
+                                cursor: 'pointer',
                                 backgroundColor: 'white',
                                 color: '#6e757c',
                                 textIndent: '4px',
                                 borderColor: '#ced4da',
-                                outlineWidth: 0
+                                outlineWidth: 0,
+                                outlineStyle: 'none'
                             }}
                         />
                     </Form.Group>
@@ -284,11 +286,13 @@ class AuthSurveyPage extends Component {
                                 width: '300px', 
                                 height: '38px',
 
+                                cursor: 'pointer',
                                 backgroundColor: 'white',
                                 color: '#6e757c',
                                 textIndent: '4px',
                                 borderColor: '#ced4da',
-                                outlineWidth: 0
+                                outlineWidth: 0,
+                                outlineStyle: 'none'
                             }}
                         />
                     </Form.Group>
@@ -347,7 +351,6 @@ class AuthSurveyPage extends Component {
                     this._updateResponseValue(i, Number(user.surveyAnswers[i]));
                 }
             }
-            else if (!user) this.props.setError('Error: Failed to fetch user data. Please wait and try again.');
             else this.setState({ name: user.name });
         });
     }

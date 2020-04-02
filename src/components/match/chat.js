@@ -12,6 +12,7 @@ import SendIcon from '../../assets/send-icon.png';
 const MESSAGE_COUNT_LIMIT = 50;
 
 const ALLOW_SELECT = {
+    cursor: 'text',
     userSelect: 'text',
     msUserSelect: 'text',
     KhtmlUserSelect: 'text',
@@ -19,10 +20,12 @@ const ALLOW_SELECT = {
 }
 
 const DISALLOW_SELECT = {
+    cursor: 'default',
     userSelect: 'none',
     msUserSelect: 'none',
     KhtmlUserSelect: 'none',
-    MozUserSelect: 'none'
+    MozUserSelect: 'none',
+    WebkitUserSelect: 'none'
 };
 
 class ChatDisplay extends Component {
@@ -84,11 +87,10 @@ class ChatDisplay extends Component {
                 <div
                     id='message-display'
                     style={{
-                        display: 'flex',
+                        display: 'block',
                         flexDirection: 'column',
 
                         height: '100%',
-
                         overflow: 'scroll',
                         ...ALLOW_SELECT
                     }}
@@ -179,7 +181,7 @@ class ChatDisplay extends Component {
 
                                         maxWidth: isMobile ? '235px' : '350px',
                                         padding: '5px',
-                                        paddingLeft: '10px',
+                                        paddingLeft: '12px',
                                         paddingRight: '10px',
                                         marginBottom: (!matchesBelowUser && !largeTimeGapBelow && !hasLastUserTag) ? '8px' : '2px',
 
@@ -264,6 +266,7 @@ class ChatDisplay extends Component {
 
                     {/* submit input button */}
                     <img 
+                        onDragStart={this._preventDragHandler}
                         onClick={this._submitMessage}
                         onMouseEnter={() => { this.setState({ sendHover: true }); }}
                         onMouseLeave={() => { this.setState({ sendHover: false }); }}
@@ -450,6 +453,10 @@ class ChatDisplay extends Component {
                 messages: this.state.messages.concat(message)
             });
         }
+    }
+
+    _preventDragHandler = (e) => {
+        e.preventDefault();
     }
 }
 
