@@ -9,6 +9,7 @@ class RulesPage extends Component {
                 style={{
                     position: 'absolute',
                     display: 'flex',
+                    flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
 
@@ -28,7 +29,7 @@ class RulesPage extends Component {
                 }}
             >
 
-                {/* center console */}
+                {/* top console */}
                 <div
                     style={{
                         display: 'flex',
@@ -36,7 +37,41 @@ class RulesPage extends Component {
                         justifyContent: 'center',
 
                         width: '360px',
-                        height: '550px',
+                        height: '265px',
+                        padding: '25px',
+                        marginBottom: '20px',
+
+                        fontSize: '13px',
+                        borderRadius: '5px',
+                        backgroundColor: '#f9f9f9',
+                        boxShadow: '0 7px 14px 0 rgba(60, 66, 87, 0.07), 0 3px 6px 0 rgba(0, 0, 0, 0.07)',
+                    }}
+                >
+                    <div
+                        style={{
+                            alignSelf: 'center',
+                            fontSize: '19px',
+                            marginBottom: '25px'
+                        }}
+                    >
+                        About This Project
+                    </div>
+
+                    While learning about common struggles from around the world, a simple thought occured to me: maybe we're not too different after all.
+                    Maybe people from opposite ends of the world are actually quite similar.
+                    From this epiphany, I devised the Global Matching Project — an attempt to bring similar people from all over the globe together. I invite you to join: to talk, to sympathize, to joke, and to expand your horizons.
+
+                </div>
+
+                {/* bottom console */}
+                <div
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+
+                        width: '360px',
+                        height: '435px',
                         padding: '25px',
 
                         borderRadius: '5px',
@@ -47,29 +82,29 @@ class RulesPage extends Component {
                     <div
                         style={{
                             alignSelf: 'center',
-                            fontSize: '22px'
+                            fontSize: '19px'
                         }}
                     >
-                        The rules are simple!
+                        How It Works
                     </div>
 
-                    <div style={{ marginTop: '55px', fontSize: '14px' }}>
+                    <div style={{ marginTop: '25px', fontSize: '13px' }}>
                         <b>Step 1: </b>Everyone fills in a survey with a bunch of interesting questions.
                     </div>
 
-                    <div style={{ marginTop: '20px', fontSize: '14px' }}>
-                        <b>Step 2: </b>We run an algorithm that places you in a group with the 3-4 most similar people in the world!
+                    <div style={{ marginTop: '15px', fontSize: '13px' }}>
+                        <b>Step 2: </b>We run an algorithm that places you in a group with the four most similar people in the world!
                     </div> 
 
-                    <div style={{ marginTop: '20px', fontSize: '14px' }}>
-                        <b>Step 3: </b>Chat away.
+                    <div style={{ marginTop: '15px', fontSize: '13px' }}>
+                        <b>Step 3: </b>Make a friend. Joke around. Fall in love. It's your global playground and your decision.
                     </div> 
 
-                    <div style={{ marginTop: '20px', fontSize: '14px' }}>
+                    <div style={{ marginTop: '15px', fontSize: '13px' }}>
                         <b>Step 4: </b>This process will repeat every week. The deadline to join the next matching is Friday at midnight UTC.
                     </div>
-                    
-                    <div style={{ marginTop: '20px', fontSize: '14px' }}>
+                     
+                    <div style={{ marginTop: '15px', fontSize: '13px' }}>
                         <b>Remember: </b>Each group chat will only be active until the deadline of the next matching!
                     </div>
 
@@ -80,7 +115,7 @@ class RulesPage extends Component {
                         style={{
                             alignSelf: 'center',
                             width: '210px',
-                            marginTop: '55px'
+                            marginTop: '30px'
                         }}
                     >
                         Back
