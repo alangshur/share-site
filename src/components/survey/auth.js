@@ -20,10 +20,10 @@ class AuthSurveyPage extends Component {
             country: '',
             region: '',
 
-            0: [5, false], 1: [5, false], 2: [5, false], 3: [5, false], 
-            4: [5, false], 5: [5, false], 6: [5, false], 7: [5, false], 
-            8: [5, false], 9: [5, false], 10: [5, false], 11: [5, false], 
-            12: [5, false], 13: [5, false], 14: [5, false]
+            0: [0, false], 1: [0, false], 2: [0, false], 3: [0, false], 
+            4: [0, false], 5: [0, false], 6: [0, false], 7: [0, false], 
+            8: [0, false], 9: [0, false], 10: [0, false], 11: [0, false], 
+            12: [0, false], 13: [0, false], 14: [0, false]
         }
     }
 
@@ -71,23 +71,24 @@ class AuthSurveyPage extends Component {
                         display: 'flex',
                         alignContent: 'center',
 
-                        width: '315px',
+                        width: '290px',
                         marginBottom: '100px',
                         
                         fontSize: '18px',
                         textAlign: 'center'
                     }}
                 >
-                    15 Questions to Find the Most Similar Match in the World
+                    15 Questions to Find Your Globally Optimal Match
                 </b>
 
                 {/* survey questions */}
                 <SurveyQuestion
                     num={0}
                     initValue={this.state[0][0]}
+                    initEdit={this.state[0][1]}
                     prompt={'The collective wellbeing of mankind is more important than my own wellbeing.'}
                     zeroPrompt={'No way. My needs come first!'}
-                    tenPrompt={'Of course! I serve the people.'}
+                    tenPrompt={'Of course! Caring is my middle name.'}
                     updateVal={this._updateResponseValue}
                     updateEdit={this._updateEditState}
                 />
@@ -95,9 +96,10 @@ class AuthSurveyPage extends Component {
                 <SurveyQuestion
                     num={1}
                     initValue={this.state[1][0]}
-                    prompt={'I get quickly involved in social circles at new settings.'}
+                    initEdit={this.state[1][1]}
+                    prompt={'I quickly get involved in social circles in new settings.'}
                     zeroPrompt={'Ugh. I hate people.'}
-                    tenPrompt={'Yea. I\'m the life of the party.'}
+                    tenPrompt={'Yeah. I\'m the life of the party.'}
                     updateVal={this._updateResponseValue}
                     updateEdit={this._updateEditState}
                 />
@@ -105,9 +107,10 @@ class AuthSurveyPage extends Component {
                 <SurveyQuestion
                     num={2}
                     initValue={this.state[2][0]}
+                    initEdit={this.state[2][1]}
                     prompt={'I\'m happy to be alive.'}
                     zeroPrompt={'Not really. Life is overrated.'}
-                    tenPrompt={'Life is positively fantastic.'}
+                    tenPrompt={'For sure. Life is positively fantastic.'}
                     updateVal={this._updateResponseValue}
                     updateEdit={this._updateEditState}
                 />
@@ -115,9 +118,10 @@ class AuthSurveyPage extends Component {
                 <SurveyQuestion
                     num={3}
                     initValue={this.state[3][0]}
+                    initEdit={this.state[3][1]}
                     prompt={'I often overthink things.'}
-                    zeroPrompt={'Never. I just go with the flow.'}
-                    tenPrompt={'Yea. My head hurts.'}
+                    zeroPrompt={'Nope. I just go with the flow.'}
+                    tenPrompt={'Yeah. My head hurts.'}
                     updateVal={this._updateResponseValue}
                     updateEdit={this._updateEditState}
                 />
@@ -125,9 +129,10 @@ class AuthSurveyPage extends Component {
                 <SurveyQuestion
                     num={4}
                     initValue={this.state[4][0]}
+                    initEdit={this.state[4][1]}
                     prompt={'I believe there is some god-like being with a plan.'}
                     zeroPrompt={'Zero chance. That\'s silly.'}
-                    tenPrompt={'Not a doubt in my mind.'}
+                    tenPrompt={'Hallelujah. Not a doubt in my mind.'}
                     updateVal={this._updateResponseValue}
                     updateEdit={this._updateEditState}
                 />
@@ -135,7 +140,8 @@ class AuthSurveyPage extends Component {
                 <SurveyQuestion
                     num={5}
                     initValue={this.state[5][0]}
-                    prompt={'I often make sacrifices for the greater good.'}
+                    initEdit={this.state[5][1]}
+                    prompt={'One should make sacrifices for the greater good.'}
                     zeroPrompt={'No. Not my responsibility.'}
                     tenPrompt={'Yep. Everyone should help out!'}
                     updateVal={this._updateResponseValue}
@@ -145,9 +151,10 @@ class AuthSurveyPage extends Component {
                 <SurveyQuestion
                     num={6}
                     initValue={this.state[6][0]}
+                    initEdit={this.state[6][1]}
                     prompt={'I\'m completely comfortable being the center of attention.'}
-                    zeroPrompt={'That\'s my least favorite thing.'}
-                    tenPrompt={'Of course. I\'m a social leader.'}
+                    zeroPrompt={'I prefer Netflix in bed.'}
+                    tenPrompt={'I\'m the first on the dance floor.'}
                     updateVal={this._updateResponseValue}
                     updateEdit={this._updateEditState}
                 />
@@ -155,9 +162,10 @@ class AuthSurveyPage extends Component {
                 <SurveyQuestion
                     num={7}
                     initValue={this.state[7][0]}
-                    prompt={'"Survival of the Fittest" is a better orientation than "One for All and All for One".'}
+                    initEdit={this.state[7][1]}
+                    prompt={'"Survival of the Fittest" is a better philosophy than "One for All and All for One".'}
                     zeroPrompt={'No. We\'re here to help each other.'}
-                    tenPrompt={'For sure. The world must be competitive.'}
+                    tenPrompt={'Yes! I\'m a winner!'}
                     updateVal={this._updateResponseValue}
                     updateEdit={this._updateEditState}
                 />
@@ -165,9 +173,10 @@ class AuthSurveyPage extends Component {
                 <SurveyQuestion
                     num={8}
                     initValue={this.state[8][0]}
+                    initEdit={this.state[8][1]}
                     prompt={'I\'m generally less anxious than my friends.'}
-                    zeroPrompt={'I stress over everything.'}
-                    tenPrompt={'100%! I\'m as calm as a cat.'}
+                    zeroPrompt={'Oh man. I stress over everything.'}
+                    tenPrompt={'100%! I\'m as cool as a cucumber.'}
                     updateVal={this._updateResponseValue}
                     updateEdit={this._updateEditState}
                 />
@@ -175,9 +184,10 @@ class AuthSurveyPage extends Component {
                 <SurveyQuestion
                     num={9}
                     initValue={this.state[9][0]}
+                    initEdit={this.state[9][1]}
                     prompt={'I rarely let gut feeling guide my decisions.'}
                     zeroPrompt={'Not me. I have great instinct.'}
-                    tenPrompt={'Trusting your gut is irresponsible.'}
+                    tenPrompt={'Only if I\'m looking for trouble.'}
                     updateVal={this._updateResponseValue}
                     updateEdit={this._updateEditState}
                 />
@@ -185,9 +195,10 @@ class AuthSurveyPage extends Component {
                 <SurveyQuestion
                     num={10}
                     initValue={this.state[10][0]}
+                    initEdit={this.state[10][1]}
                     prompt={'It\'s my responsibility to share with the less fortunate.'}
                     zeroPrompt={'Says who? That\'s stupid.'}
-                    tenPrompt={'No doubt! I\'ll share everything.'}
+                    tenPrompt={'No doubt! What\'s mine is yours.'}
                     updateVal={this._updateResponseValue}
                     updateEdit={this._updateEditState}
                 />
@@ -195,6 +206,7 @@ class AuthSurveyPage extends Component {
                 <SurveyQuestion
                     num={11}
                     initValue={this.state[11][0]}
+                    initEdit={this.state[11][1]}
                     prompt={'I plan on raising (or have raised) my children with religion.'}
                     zeroPrompt={'They can decide for themselves.'}
                     tenPrompt={'Orthodox all the way!'}
@@ -205,9 +217,10 @@ class AuthSurveyPage extends Component {
                 <SurveyQuestion
                     num={12}
                     initValue={this.state[12][0]}
+                    initEdit={this.state[12][1]}
                     prompt={'I recharge by being around others.'}
-                    zeroPrompt={'Nope. I need to isolate.'}
-                    tenPrompt={'My social energy is always high.'}
+                    zeroPrompt={'Nope. I need my alone time.'}
+                    tenPrompt={'Yeah! Bring on the crowd.'}
                     updateVal={this._updateResponseValue}
                     updateEdit={this._updateEditState}
                 />
@@ -215,9 +228,10 @@ class AuthSurveyPage extends Component {
                 <SurveyQuestion
                     num={13}
                     initValue={this.state[13][0]}
+                    initEdit={this.state[13][1]}
                     prompt={'People should be self-reliant and not depend on the government.'}
-                    zeroPrompt={'No. That\'s a recipe for disaster.'}
-                    tenPrompt={'Of course. To each their own!'}
+                    zeroPrompt={'No. We need each other.'}
+                    tenPrompt={'Of course. Let me shine.'}
                     updateVal={this._updateResponseValue}
                     updateEdit={this._updateEditState}
                 />
@@ -225,9 +239,10 @@ class AuthSurveyPage extends Component {
                 <SurveyQuestion
                     num={14}
                     initValue={this.state[14][0]}
+                    initEdit={this.state[14][1]}
                     prompt={'Worrying about the meaning of life is pointless.'}
                     zeroPrompt={'No. It\'s the mark of a great thinker.'}
-                    tenPrompt={'There\'s no reason to worry.'}
+                    tenPrompt={'Yep. Don\'t worry, be happy.'}
                     updateVal={this._updateResponseValue}
                     updateEdit={this._updateEditState}
                 />
@@ -349,6 +364,7 @@ class AuthSurveyPage extends Component {
                 // save existing answers
                 for (var i = 0; i < QUESTION_COUNT; i++) {
                     this._updateResponseValue(i, Number(user.surveyAnswers[i]));
+                    this._updateEditState(i, true);
                 }
             }
             else this.setState({ name: user.name });

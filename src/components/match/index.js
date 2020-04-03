@@ -43,9 +43,10 @@ class MatchPage extends Component {
                 {this.state.error &&
                     <div
                         style={{
-                            position: 'absolute',
+                            position: 'fixed',
                             display: 'flex',
                             justifyContent: 'center',
+                            zIndex: 10,
 
                             width: '100%',
                             padding: '20px'
@@ -56,7 +57,6 @@ class MatchPage extends Component {
                             style={{
                                 display: 'flex',
                                 justifyContent: 'center',
-                                zIndex: '10',
 
                                 width: '100%',
                             }}

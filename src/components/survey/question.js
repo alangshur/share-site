@@ -8,7 +8,7 @@ class SurveyQuestion extends Component {
         super(props);
         this.state = {
             value: props.initValue,
-            edited: false
+            edited: props.initEdit
         }
     }
 
@@ -31,11 +31,20 @@ class SurveyQuestion extends Component {
                         marginBottom: '25px', 
                         
                         fontSize: isMobile ? '15px' : '16px',
-                        fontStyle: this.state.edited ? 'normal' : 'italic' 
                     }} 
                 >
-                    <b style={{ fontStyle: 'normal' }}>Q{this.props.num + 1}: </b>
+                    <b>Q{this.props.num + 1}: </b>
                     {this.props.prompt}
+                    {!this.state.edited && 
+                        <div 
+                            style={{ 
+                                display: 'inline-block',
+                                color: '#dc3545',
+                                fontWeight: 'bold'
+                            }}>
+                            *
+                        </div>
+                    }
                 </div>
 
                 <div 

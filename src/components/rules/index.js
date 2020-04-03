@@ -57,9 +57,9 @@ class RulesPage extends Component {
                         About This Project
                     </div>
 
-                    While learning about common struggles from around the world, a simple thought occured to me: maybe we're not too different after all.
+                    While thinking about common struggles around the world, a simple thought occured to me: maybe we're not so different after all.
                     Maybe people from opposite ends of the world are actually quite similar.
-                    From this epiphany, I devised the Global Matching Project — an attempt to bring similar people from all over the globe together. I invite you to join: to talk, to sympathize, to joke, and to expand your horizons.
+                    From this insight, I created the Global Matching Project — an attempt to bring similar people from all over the globe together. I invite you to join: to talk, to bond, to joke, and to expand your horizons.
 
                 </div>
 
