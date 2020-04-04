@@ -70,7 +70,8 @@ class AuthHomeDisplay extends Component {
                         margin: 0,
                         padding: 0,
 
-                        color: '#36454F'
+                        color: '#36454F',
+                        overflow: 'hidden'
                     }}
                 >
 
@@ -93,7 +94,7 @@ class AuthHomeDisplay extends Component {
                     <div
                         style={{
                             width: '165px',
-                            marginBottom: isMobile ? '30px' : '55px',
+                            marginBottom: isMobile ? '50px' : '65px',
 
                             lineHeight: '22px',
                             letterSpacing: '1px',
@@ -183,7 +184,7 @@ class AuthHomeDisplay extends Component {
                             flexShrink: 0,
 
                             width: '360px',
-                            height: '160px',
+                            height: '170px',
                             marginBottom: '25px',
 
                             color: '#36454F',
@@ -252,7 +253,7 @@ class AuthHomeDisplay extends Component {
                             flexShrink: 0,
 
                             width: '360px',
-                            height: '145px',
+                            height: '150px',
 
                             color: '#36454F',
                             borderRadius: '5px',

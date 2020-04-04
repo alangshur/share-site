@@ -62,7 +62,8 @@ class NoAuthHomeDisplay extends Component {
                         margin: 0,
                         padding: 0,
 
-                        color: '#36454F'
+                        color: '#36454F',
+                        overflow: 'hidden'
                     }}
                 >
 

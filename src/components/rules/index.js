@@ -26,8 +26,9 @@ class RulesPage extends Component {
                     msUserSelect: 'none',
                     KhtmlUserSelect: 'none',
                     MozUserSelect: 'none',
-                    overflow: 'scroll',
-                    WebkitUserSelect: 'none'
+                    WebkitUserSelect: 'none',
+                    overflow: 'hidden'
+
                 }}
             >
 
