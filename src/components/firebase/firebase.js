@@ -154,7 +154,7 @@ class Firebase {
         const messagesRef = this.db.collection('matchings').doc(current)
             .collection('matches').doc(matchId).collection('messages');
 
-        messagesRef.orderBy('timestamp', 'desc').limit(limit).onSnapshot(snapshot => {
+        return messagesRef.orderBy('timestamp', 'desc').limit(limit).onSnapshot(snapshot => {
             const changes = snapshot.docChanges().reverse();
             const bulk = Boolean(changes.length > 10);
 

@@ -59,6 +59,8 @@ class NoAuthHomeDisplay extends Component {
                         left: 0,
                         height: '100%',
                         width: '100%',
+                        margin: 0,
+                        padding: 0,
 
                         color: '#36454F'
                     }}
@@ -102,6 +104,7 @@ class NoAuthHomeDisplay extends Component {
                             flexDirection: 'column',
                             justifyContent: 'center',
                             alignItems: 'center',
+                            flexShrink: 0,
 
                             width: '325px',
                             height: '250px',
@@ -149,7 +152,7 @@ class NoAuthHomeDisplay extends Component {
                             <b>
                                 {this.state.signupCount ?
                                     this.state.signupCount.toLocaleString() :
-                                    '--'
+                                    '0'
                                 }
                             </b>
                         </div>
@@ -166,7 +169,7 @@ class NoAuthHomeDisplay extends Component {
                             <b>
                                 {this.state.timeLeft ?
                                     formatTimeFromMs(this.state.timeLeft) :
-                                    '--'
+                                    '[Loading]'
                                 }
                             </b>
                         </div>

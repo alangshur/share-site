@@ -87,14 +87,15 @@ class AuthMatchPage extends Component {
                         <div
                             style={{
                                 display: 'flex',
-                                flexDirection: 'row',
-                                alignItems: 'space-between',
+                                flexDirection: 'column',
                                 justifyContent: 'space-between',
-                                flexWrap: 'wrap',
 
-                                width: isMobile ? '360px' : '720px',
+                                width: isMobile ? '97%' : '720px',
+                                height: '115px',
                                 padding: '10px',
-                                marginTop: '30px',
+                                paddingLeft: '15px',
+                                paddingRight: '15px',
+                                marginTop: '20px',
 
                                 color: '#36454F',
                                 borderRadius: '5px',
@@ -108,10 +109,11 @@ class AuthMatchPage extends Component {
                                         key={user.name}  
                                         style={{
                                             display: 'flex',
-                                            flexDirection: 'column',
+                                            flexDirection: 'row',
+                                            justifyContent: 'space-between',
+                                            flexWrap: 'wrap',
 
-                                            margin: '15px',
-                                            fontSize: '13px'
+                                            fontSize: isMobile ? '12px' : '13px'
                                         }}
                                     >
                                         <div><b>{user.name}</b>, {user.age}</div>

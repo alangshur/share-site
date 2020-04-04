@@ -6,6 +6,7 @@ import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 import LoadingSpinner from '../../loading';
 import SurveyQuestion from './question';
 import { withFirebase } from '../firebase';
+import { withSession } from '../session';
 
 const QUESTION_COUNT = 15;
 
@@ -66,7 +67,7 @@ class AuthSurveyPage extends Component {
             >
 
                 {/* title */}
-                <b
+                <div
                     style={{
                         display: 'flex',
                         alignContent: 'center',
@@ -74,12 +75,12 @@ class AuthSurveyPage extends Component {
                         width: '290px',
                         marginBottom: '100px',
                         
-                        fontSize: '18px',
+                        fontSize: '22px',
                         textAlign: 'center'
                     }}
                 >
                     15 Questions to Find Your Globally Optimal Match
-                </b>
+                </div>
 
                 {/* survey questions */}
                 <SurveyQuestion
@@ -279,7 +280,11 @@ class AuthSurveyPage extends Component {
                             style={{ 
                                 width: '300px', 
                                 height: '38px',
+                                paddingLeft: '9px',
 
+                                WebkitAppearance: 'none',
+                                MozApperance: 'none',
+                                appearance: 'none',
                                 cursor: 'pointer',
                                 backgroundColor: 'white',
                                 color: '#6e757c',
@@ -300,7 +305,11 @@ class AuthSurveyPage extends Component {
                             style={{ 
                                 width: '300px', 
                                 height: '38px',
+                                paddingLeft: '9px',
 
+                                WebkitAppearance: 'none',
+                                MozApperance: 'none',
+                                appearance: 'none',
                                 cursor: 'pointer',
                                 backgroundColor: 'white',
                                 color: '#6e757c',
@@ -367,7 +376,7 @@ class AuthSurveyPage extends Component {
                     this._updateEditState(i, true);
                 }
             }
-            else this.setState({ name: user.name });
+            else this.setState({ name: this.props.user.displayName });
         });
     }
 
@@ -411,4 +420,4 @@ class AuthSurveyPage extends Component {
     }
 }
 
-export default withRouter(withFirebase(AuthSurveyPage));
+export default withRouter(withSession(withFirebase(AuthSurveyPage)));

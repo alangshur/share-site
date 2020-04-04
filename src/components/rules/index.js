@@ -17,6 +17,8 @@ class RulesPage extends Component {
                     left: 0,
                     height: '100%',
                     width: '100%',
+                    margin: 0,
+                    padding: 0,
 
                     color: '#36454F',
                     cursor: 'default',
@@ -34,12 +36,13 @@ class RulesPage extends Component {
                     style={{
                         display: 'flex',
                         flexDirection: 'column',
-                        justifyContent: 'center',
+                        justifyContent: 'space-between',
+                        flexShrink: 0,
 
                         width: '360px',
-                        height: '265px',
-                        padding: '25px',
-                        marginBottom: '20px',
+                        height: '240px',
+                        padding: '20px',
+                        marginBottom: '25px',
 
                         fontSize: '13px',
                         borderRadius: '5px',
@@ -51,16 +54,13 @@ class RulesPage extends Component {
                         style={{
                             alignSelf: 'center',
                             fontSize: '19px',
-                            marginBottom: '25px'
                         }}
                     >
                         About This Project
                     </div>
 
-                    While thinking about common struggles around the world, a simple thought occured to me: maybe we're not so different after all.
-                    Maybe people from opposite ends of the world are actually quite similar.
-                    From this insight, I created the Global Matching Project — an attempt to bring similar people from all over the globe together. I invite you to join: to talk, to bond, to joke, and to expand your horizons.
-
+                    The whole world, regardless of creed, color, or origin, is struggling right now. Maybe, depsite the thousands of miles between us, we're not too different after all.
+                    As a response to this insight, I present the Global Matching Project — an attempt to bring similar people from all over the globe together. I invite you to join: to talk, to bond, to joke, and to expand your horizons.
                 </div>
 
                 {/* bottom console */}
@@ -68,12 +68,14 @@ class RulesPage extends Component {
                     style={{
                         display: 'flex',
                         flexDirection: 'column',
-                        justifyContent: 'center',
+                        justifyContent: 'space-between',
+                        flexShrink: 0,
 
                         width: '360px',
-                        height: '435px',
-                        padding: '25px',
+                        height: '380px',
+                        padding: '20px',
 
+                        fontSize: '13px',
                         borderRadius: '5px',
                         backgroundColor: '#f9f9f9',
                         boxShadow: '0 7px 14px 0 rgba(60, 66, 87, 0.07), 0 3px 6px 0 rgba(0, 0, 0, 0.07)',
@@ -82,30 +84,27 @@ class RulesPage extends Component {
                     <div
                         style={{
                             alignSelf: 'center',
-                            fontSize: '19px'
+                            marginBottom: '3px',
+                            fontSize: '19px',
                         }}
                     >
                         How It Works
                     </div>
 
-                    <div style={{ marginTop: '25px', fontSize: '13px' }}>
+                    <div>
                         <b>Step 1: </b>Everyone fills in a survey with a bunch of interesting questions.
                     </div>
 
-                    <div style={{ marginTop: '15px', fontSize: '13px' }}>
-                        <b>Step 2: </b>We run an algorithm that places you in a group with the four most similar people in the world!
+                    <div>
+                        <b>Step 2: </b>We run an algorithm that places you in a group with the four most similar people in the world.
                     </div> 
 
-                    <div style={{ marginTop: '15px', fontSize: '13px' }}>
+                    <div>
                         <b>Step 3: </b>Make a friend. Joke around. Fall in love. It's your global playground and your decision.
                     </div> 
 
-                    <div style={{ marginTop: '15px', fontSize: '13px' }}>
-                        <b>Step 4: </b>This process will repeat every week. The deadline to join the next matching is Friday at midnight UTC.
-                    </div>
-                     
-                    <div style={{ marginTop: '15px', fontSize: '13px' }}>
-                        <b>Remember: </b>Each group chat will only be active until the deadline of the next matching!
+                    <div>
+                        <b>Step 4: </b>This process will repeat every week. The deadline to join the next matching (and chat with your matches) is Friday at midnight UTC.
                     </div>
 
                     <Button
@@ -115,7 +114,7 @@ class RulesPage extends Component {
                         style={{
                             alignSelf: 'center',
                             width: '210px',
-                            marginTop: '30px'
+                            marginTop: '10px'
                         }}
                     >
                         Back

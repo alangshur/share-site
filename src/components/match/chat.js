@@ -16,7 +16,8 @@ const ALLOW_SELECT = {
     userSelect: 'text',
     msUserSelect: 'text',
     KhtmlUserSelect: 'text',
-    MozUserSelect: 'text'
+    MozUserSelect: 'text',
+    WebkitUserSelect: 'text'
 }
 
 const DISALLOW_SELECT = {
@@ -70,11 +71,11 @@ class ChatDisplay extends Component {
                     display: 'flex',
                     flexDirection: 'column',
 
-                    width: isMobile ? '360px' : '720px',
-                    height: isMobile ? '480px' : '70%',
+                    width: isMobile ? '97%' : '720px',
+                    height: isMobile ? '70%' : '70%',
                     padding: '10px',
                     paddingBottom: '0px',
-                    marginTop: '20px',
+                    marginTop: '10px',
 
                     color: '#36454F',
                     borderRadius: '5px',
@@ -186,7 +187,7 @@ class ChatDisplay extends Component {
                                         marginBottom: (!matchesBelowUser && !largeTimeGapBelow && !hasLastUserTag) ? '8px' : '2px',
 
                                         wordWrap: 'break-word',
-                                        fontSize: isMobile ? '11px' : '12px',
+                                        fontSize: '12px',
                                         borderTopRightRadius: (belongsToUser && matchesAboveUser && !largeTimeGapAbove) ? '5px' : '15px',
                                         borderBottomRightRadius: (belongsToUser && matchesBelowUser && !largeTimeGapBelow) ? '5px' : '15px',
                                         borderTopLeftRadius: (!belongsToUser && matchesAboveUser && !largeTimeGapAbove) ? '5px' : '15px',

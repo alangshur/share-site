@@ -67,6 +67,8 @@ class AuthHomeDisplay extends Component {
                         left: 0,
                         height: '100%',
                         width: '100%',
+                        margin: 0,
+                        padding: 0,
 
                         color: '#36454F'
                     }}
@@ -91,7 +93,7 @@ class AuthHomeDisplay extends Component {
                     <div
                         style={{
                             width: '165px',
-                            marginBottom: isMobile ? '40px' : '60px',
+                            marginBottom: isMobile ? '30px' : '55px',
 
                             lineHeight: '22px',
                             letterSpacing: '1px',
@@ -115,10 +117,11 @@ class AuthHomeDisplay extends Component {
                                 flexDirection: 'row',
                                 justifyContent: 'center',
                                 alignItems: 'center',
+                                flexShrink: 0,
 
                                 height: '35px',
                                 width: '360px',
-                                marginBottom: '35px',
+                                marginBottom: '25px',
 
                                 fontSize: '14px',
                                 cursor: this.state.algorithmRunning ? 'default' : 'pointer'
@@ -177,10 +180,11 @@ class AuthHomeDisplay extends Component {
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
+                            flexShrink: 0,
 
                             width: '360px',
-                            height: '190px',
-                            marginBottom: '35px',
+                            height: '160px',
+                            marginBottom: '25px',
 
                             color: '#36454F',
                             borderRadius: '5px',
@@ -206,7 +210,7 @@ class AuthHomeDisplay extends Component {
                         {/* next matching count */}
                         <div
                             style={{
-                                marginTop: '40px',
+                                marginTop: '30px',
                                 fontSize: '14px'
                             }}
                         >
@@ -215,7 +219,7 @@ class AuthHomeDisplay extends Component {
                             <b>
                                 {this.state.signupCount ?
                                     this.state.signupCount.toLocaleString() :
-                                    '--'
+                                    '0'
                                 }
                             </b>
                         </div>
@@ -232,7 +236,7 @@ class AuthHomeDisplay extends Component {
                             <b>
                                 {this.state.timeLeft ?
                                     formatTimeFromMs(this.state.timeLeft) :
-                                    '--'
+                                    '[Loading]'
                                 }
                             </b>
                         </div>
@@ -245,9 +249,10 @@ class AuthHomeDisplay extends Component {
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'center',
+                            flexShrink: 0,
 
                             width: '360px',
-                            height: '170px',
+                            height: '145px',
 
                             color: '#36454F',
                             borderRadius: '5px',
@@ -275,7 +280,7 @@ class AuthHomeDisplay extends Component {
                             size='sm'
                             style={{
                                 width: '210px',
-                                marginTop: '35px'
+                                marginTop: '30px'
                             }}
                         >
                             Sign Out
