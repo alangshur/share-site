@@ -108,7 +108,7 @@ class NoAuthHomeDisplay extends Component {
                             flexShrink: 0,
 
                             width: '325px',
-                            height: '250px',
+                            height: '235px',
 
                             borderRadius: '5px',
                             backgroundColor: '#f9f9f9',

@@ -183,7 +183,7 @@ class AuthHomeDisplay extends Component {
                             justifyContent: 'center',
                             flexShrink: 0,
 
-                            width: '360px',
+                            width: '325px',
                             height: '170px',
                             marginBottom: '25px',
 
@@ -252,8 +252,8 @@ class AuthHomeDisplay extends Component {
                             justifyContent: 'center',
                             flexShrink: 0,
 
-                            width: '360px',
-                            height: '150px',
+                            width: '325px',
+                            height: '155px',
 
                             color: '#36454F',
                             borderRadius: '5px',
