@@ -41,8 +41,8 @@ class RulesPage extends Component {
                         flexShrink: 0,
 
                         width: '360px',
-                        height: '240px',
-                        padding: '20px',
+                        height: '285px',
+                        padding: '15px',
                         marginBottom: '25px',
 
                         fontSize: '13px',
@@ -60,8 +60,11 @@ class RulesPage extends Component {
                         About This Project
                     </div>
 
-                    The whole world, regardless of creed, color, or origin, is struggling right now. Maybe, depsite the thousands of miles between us, we're not too different after all.
-                    As a response to this insight, I present the Global Matching Project — an attempt to bring similar people from all over the globe together. I invite you to join: to talk, to bond, to joke, and to expand your horizons.
+                    The world is isolated, struggling, and in desperate need of coming together. Maybe, despite the thousands of miles between us, we’ll find that we’re not so different after all.
+
+                    I created the Global Matching Project to take a stab at this problem — to bring together like-minded people from all over the globe and form meaningful connections across borders. I invite you to join: to talk, to bond, to joke, and to lift each other out of isolation and struggle.
+
+                    The more people that join, the better the algorithm will perform, and the closer the connections will be.
                 </div>
 
                 {/* bottom console */}
@@ -73,8 +76,8 @@ class RulesPage extends Component {
                         flexShrink: 0,
 
                         width: '360px',
-                        height: '380px',
-                        padding: '20px',
+                        height: '340px',
+                        padding: '15px',
 
                         fontSize: '13px',
                         borderRadius: '5px',

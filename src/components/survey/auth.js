@@ -266,9 +266,10 @@ class AuthSurveyPage extends Component {
                     <Form.Group style={{ marginBottom: '20px' }}>
                         <Form.Label style={{ fontSize: '15px' }}>Age (e.g. 20)</Form.Label>
                         <Form.Control 
+                            type='number'
                             placeholder='Age'
                             value={this.state.age || ''}
-                            onChange={event => this.setState({ age: event.target.value })}
+                            onChange={this._updateAgeValue}
                         />
                     </Form.Group>
 
@@ -350,6 +351,11 @@ class AuthSurveyPage extends Component {
         );
     }
 
+    _updateAgeValue = event => {
+        const value = event.target.value;
+        if (value.length <= 3) this.setState({ age: value });
+    }
+
     _updateResponseValue = (num, val) => {
         this.setState({ [num]: [val, this.state[num][1]] });
     }
@@ -394,7 +400,7 @@ class AuthSurveyPage extends Component {
 
                 // validate field answers
                 if (isNaN(this.state.age) || (Number(this.state.age) < 16) || (Number(this.state.age) > 109))
-                    throw new Error('Please enter a valid age in years.');
+                    throw new Error('Please enter a valid age in years (16-109).');
                 if (!this.state.country) throw new Error('Please select a valid country from dropdown.');
                 if (!this.state.region) throw new Error('Please select a valid region from dropdown.');
 
