@@ -28,7 +28,6 @@ class RulesPage extends Component {
                     MozUserSelect: 'none',
                     WebkitUserSelect: 'none',
                     overflow: 'hidden'
-
                 }}
             >
 

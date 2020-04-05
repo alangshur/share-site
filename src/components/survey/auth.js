@@ -256,7 +256,7 @@ class AuthSurveyPage extends Component {
                     }}
                 >
                     <Form.Group style={{ marginBottom: '20px' }}>
-                        <Form.Label style={{ fontSize: '15px' }}>Full Name</Form.Label>
+                        <Form.Label style={{ fontSize: '15px' }}>Display Name</Form.Label>
                         <Form.Control 
                             disabled
                             value={this.state.name || ''}
