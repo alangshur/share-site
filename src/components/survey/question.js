@@ -7,8 +7,13 @@ class SurveyQuestion extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: props.initValue,
-            edited: props.initEdit
+            value: props.initValue
+        }
+    }
+
+    componentDidUpdate() {
+        if (this.props.initValue !== this.state.value) {
+            this.setState({ value: this.props.initValue });
         }
     }
 
@@ -35,7 +40,7 @@ class SurveyQuestion extends Component {
                 >
                     <b>Q{this.props.num + 1}: </b>
                     {this.props.prompt}
-                    {!this.state.edited && 
+                    {(this.state.value === -1) && 
                         <div 
                             style={{ 
                                 display: 'inline-block',
@@ -47,37 +52,30 @@ class SurveyQuestion extends Component {
                     }
                 </div>
 
-                <div 
-                    onClick={this._onClick}
-                    style={{ width: '100%', cursor: 'pointer' }}
-                >
-                    <Slider
-                        value={this.state.value}
-                        onChange={this._onChange}
-                        min={0}
-                        max={10}
-                        marks={{
-                            0: <div style={{ width: '90px', fontSize: '13px', color: 'grey' }}>{this.props.zeroPrompt}</div>,
-                            2: '2', 
-                            4: '4',
-                            6: '6',
-                            8: '8', 
-                            10: <div style={{ width: '90px', fontSize: '13px', color: 'grey' }}>{this.props.tenPrompt}</div>
-                        }}
-                        style={{ width: '100%' }}
-                    />
-                </div>
+                <Slider
+                    value={this.state.value}
+                    onChange={this._onChange}
+                    onBeforeChange={this._onChange}
+                    min={0}
+                    max={10}
+                    marks={{
+                        0: <div style={{ width: '90px', fontSize: '13px', color: 'grey' }}>{this.props.zeroPrompt}</div>,
+                        2: '2', 
+                        4: '4',
+                        6: '6',
+                        8: '8', 
+                        10: <div style={{ width: '90px', fontSize: '13px', color: 'grey' }}>{this.props.tenPrompt}</div>
+                    }}
+                    style={{ 
+                        width: '100%',
+                        cursor: 'pointer'
+                    }}
+                />
             </div>
         );
     }
 
-    _onClick = () => {
-        this.setState({ edited: true });
-        this.props.updateEdit(this.props.num, true);
-    }
-
     _onChange = val => {
-        this.setState({ value: val });
         this.props.updateVal(this.props.num, val);
     }
 }
