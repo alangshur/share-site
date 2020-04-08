@@ -60,3 +60,8 @@ export function getFormattedDate(epochSeconds) {
     return monthNames[date.getMonth()] + ' ' + date.getDate() + ' at ' 
         + date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
 }
+
+// formatted user string for chat display
+export function getFormattedUserString(user) {
+    return user.name + ', age ' + user.age + ', from ' + user.region + ', ' + user.country;
+}

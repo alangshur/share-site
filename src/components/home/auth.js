@@ -94,7 +94,7 @@ class AuthHomeDisplay extends Component {
                     <div
                         style={{
                             width: '165px',
-                            marginBottom: isMobile ? '50px' : '65px',
+                            marginBottom: isMobile ? '40px' : '65px',
 
                             lineHeight: '22px',
                             letterSpacing: '1px',
@@ -121,7 +121,7 @@ class AuthHomeDisplay extends Component {
                                 flexShrink: 0,
 
                                 height: '35px',
-                                width: '360px',
+                                width: '325px',
                                 marginBottom: '25px',
 
                                 fontSize: '14px',

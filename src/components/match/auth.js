@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
-import { isMobile } from 'react-device-detect';
 
 import ChatDisplay from './chat';
 import LoadingSpinner from '../../loading';
@@ -31,7 +30,7 @@ class AuthMatchPage extends Component {
 
                     // get match info 
                     this._fetchMatchData().then(() => {
-                        this.setState({ fetching: false, initLoad: true });
+                        this.setState({ initLoad: true });
                     }).catch(err => {
                         this.setState({ fetching: false, initLoad: true });
                         this.props.setError('Error: Failed to contact servers.'); 
@@ -77,53 +76,14 @@ class AuthMatchPage extends Component {
                         <Button
                             onClick={() => this.props.history.push('/')}
                             size='sm'
-                            variant='secondary'
-                            style={{ width: '210px' }}
+                            variant='outline-secondary'
+                            style={{ 
+                                width: '210px',
+                                marginBottom: '30px'
+                            }}
                         >
                             Back
                         </Button>
-                    }
-
-                    {/* match info */}
-                    {this.state.users &&
-                        <div
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'space-between',
-
-                                width: isMobile ? '97%' : '720px',
-                                height: '115px',
-                                padding: '10px',
-                                paddingLeft: '15px',
-                                paddingRight: '15px',
-                                marginTop: '20px',
-
-                                color: '#36454F',
-                                borderRadius: '5px',
-                                backgroundColor: '#f9f9f9',
-                                boxShadow: '0 7px 14px 0 rgba(60, 66, 87, 0.07), 0 3px 6px 0 rgba(0, 0, 0, 0.07)'
-                            }}
-                        >
-                            {this.state.users.map(user => {
-                                return (
-                                    <div  
-                                        key={user.name}  
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            justifyContent: 'space-between',
-                                            flexWrap: 'wrap',
-
-                                            fontSize: isMobile ? '12px' : '13px'
-                                        }}
-                                    >
-                                        <div><b>{user.name}</b>, {user.age}</div>
-                                        <div>{user.region}, {user.country}</div>
-                                    </div>
-                                );
-                            })}
-                        </div>
                     }
 
                     {/* chat display */}
@@ -131,6 +91,7 @@ class AuthMatchPage extends Component {
                         <ChatDisplay 
                             current={this.state.current}
                             matchId={this.state.matchId}
+                            users={this.state.users}
                             setFetching={this._setFetching}
                             setError={this.props.setError}
                         />

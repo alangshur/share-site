@@ -21,12 +21,6 @@ class RulesPage extends Component {
                     padding: 0,
 
                     color: '#36454F',
-                    cursor: 'default',
-                    userSelect: 'none',
-                    msUserSelect: 'none',
-                    KhtmlUserSelect: 'none',
-                    MozUserSelect: 'none',
-                    WebkitUserSelect: 'none',
                     overflow: 'hidden'
                 }}
             >

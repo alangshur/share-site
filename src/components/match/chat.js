@@ -6,8 +6,11 @@ import './style.css';
 import { withFirebase } from '../firebase';
 import { withSession } from '../session';
 import { isMobile } from 'react-device-detect';
-import { getFormattedDate } from '../../util';
 import SendIcon from '../../assets/send-icon.png';
+import { 
+    getFormattedDate,
+    getFormattedUserString
+} from '../../util';
 
 const MESSAGE_COUNT_LIMIT = 50;
 
@@ -71,11 +74,10 @@ class ChatDisplay extends Component {
                     display: 'flex',
                     flexDirection: 'column',
 
-                    width: isMobile ? '97%' : '720px',
-                    height: isMobile ? '70%' : '70%',
+                    width: isMobile ? '97%' : '800px',
+                    height: '85%',
                     padding: '10px',
                     paddingBottom: '0px',
-                    marginTop: '10px',
 
                     color: '#36454F',
                     borderRadius: '5px',
@@ -84,41 +86,72 @@ class ChatDisplay extends Component {
                 }}
             >
 
-                {/* messages */}
+                {/* message panel */}
                 <div
                     id='message-display'
                     style={{
-                        display: 'block',
+                        display: 'flex',
                         flexDirection: 'column',
 
                         height: '100%',
                         overflow: 'scroll',
-                        ...ALLOW_SELECT
+                        cursor: 'default'
                     }}
                 >
 
-                    {/* load more button */}
-                    {(this.state.messageCount >= MESSAGE_COUNT_LIMIT) && this.state.allowLoadMore &&
-                        <Button
-                            onClick={this._loadPastMessages}
-                            variant='outline-secondary'
-                            size='sm'
-                            style={{
+                    
+                    {/* message top */}
+                    {(this.state.messageCount >= MESSAGE_COUNT_LIMIT) && this.state.allowLoadMore ?
+                        <>
+
+                            {/* load more button */}
+                            <Button
+                                onClick={this._loadPastMessages}
+                                variant='outline-secondary'
+                                size='sm'
+                                style={{
+                                    alignSelf: 'center',
+
+                                    height: '25px',
+                                    width: '70px',
+                                    marginTop: '5px',
+                                    marginBottom: '15px',
+
+                                    fontSize: '10px',
+                                    ...DISALLOW_SELECT
+                                }}
+                            >
+                                Load More
+                            </Button> 
+                        </> :
+                        <div 
+                            style={{ 
                                 alignSelf: 'center',
-
-                                height: '25px',
-                                width: '70px',
-                                marginTop: '5px',
-                                marginBottom: '15px',
-
-                                fontSize: '10px',
-                                ...DISALLOW_SELECT
+                                marginTop: '10px',
+                                marginBottom: '20px',
+                                textAlign: 'center'
                             }}
                         >
-                            Load More
-                        </Button>
+
+                                {/* users display */}
+                            {this.props.users.map(user =>
+                                <div
+                                    key={user.name}
+                                    style={{
+                                        marginBottom: '4px',
+
+                                        fontSize: isMobile ? '11px' : '12px',
+                                        color: '#919191',
+                                        ...DISALLOW_SELECT
+                                    }}
+                                >
+                                    {getFormattedUserString(user)}
+                                </div>
+                            )}
+                        </div>
                     }
 
+                    {/* message data */}
                     {Boolean(this.state.messages.length) && this.state.messages.map((message, index) => {                                                 
                         const belongsToUser = Boolean(message.name === this.props.user.displayName);
                         const matchesAboveUser = Boolean((index > 0) && (message.name === this.state.messages[index - 1].name));
@@ -133,7 +166,8 @@ class ChatDisplay extends Component {
                                 style={{
                                     display: 'flex',
                                     alignItems: 'center',
-                                    flexDirection: 'column'
+                                    flexDirection: 'column',
+                                    flexShrink: 0
                                 }}
                             >
 
@@ -162,7 +196,7 @@ class ChatDisplay extends Component {
                                             alignSelf: 'flex-start',
 
                                             marginLeft: '7px',
-                                            marginTop: largeTimeGapAbove ? '5px' : '10px',
+                                            marginTop: '5px',
                                             marginBottom: '3px',
 
                                             fontSize: '11px',
@@ -228,6 +262,7 @@ class ChatDisplay extends Component {
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'flex-end',
+                        flexShrink: 0,
                         zIndex: 5,
 
                         bottom: 0,
