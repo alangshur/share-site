@@ -12,7 +12,7 @@ import {
     getFormattedUserString
 } from '../../util';
 
-const MESSAGE_COUNT_LIMIT = 50;
+const MESSAGE_COUNT_LIMIT = 10;
 
 const ALLOW_SELECT = {
     cursor: 'text',
@@ -59,7 +59,7 @@ class ChatDisplay extends Component {
     componentDidUpdate() {
         if (this.state.lastUpdateLoadMore) this._scrollToTop();
         else this._scrollToBottom();
-    }
+    }re
 
     componentWillUnmount() {
         document.removeEventListener('keydown', this._handleKeyDown);
@@ -104,7 +104,7 @@ class ChatDisplay extends Component {
                         style={{ 
                             alignSelf: 'center',
                             marginTop: '5px',
-                            marginBottom: '25px',
+                            marginBottom: '15px',
                             textAlign: 'center'
                         }}
                     >
@@ -151,8 +151,8 @@ class ChatDisplay extends Component {
                         const belongsToUser = Boolean(message.uid === this.props.user.uid);
                         const matchesAboveUser = Boolean((index > 0) && (message.name === this.state.messages[index - 1].name));
                         const matchesBelowUser = Boolean((index < (this.state.messageCount - 1)) && (message.name === this.state.messages[index + 1].name));
-                        const largeTimeGapAbove = (index > 0) ? Boolean((message.timestamp.seconds - this.state.messages[index - 1].timestamp.seconds) >= 3600) : true;
-                        const largeTimeGapBelow = (index < (this.state.messageCount - 1)) ? Boolean((this.state.messages[index + 1].timestamp.seconds - message.timestamp.seconds) >= 3600) : true;
+                        const largeTimeGapAbove = (index > 0) ? Boolean((message.timestamp.seconds - this.state.messages[index - 1].timestamp.seconds) >= 2700) : true;
+                        const largeTimeGapBelow = (index < (this.state.messageCount - 1)) ? Boolean((this.state.messages[index + 1].timestamp.seconds - message.timestamp.seconds) >= 2700) : true;
                         const hasLastUserTag = Boolean(belongsToUser && (this.state.lastUserMessageId === message.id))
 
                         return (
@@ -191,8 +191,7 @@ class ChatDisplay extends Component {
                                             alignSelf: 'flex-start',
 
                                             marginLeft: '7px',
-                                            marginTop: '5px',
-                                            marginBottom: '3px',
+                                            marginBottom: '2px',
 
                                             fontSize: '11px',
                                             color: '#919191',
@@ -211,16 +210,16 @@ class ChatDisplay extends Component {
 
                                         maxWidth: isMobile ? '235px' : '350px',
                                         padding: '5px',
-                                        paddingLeft: '11px',
-                                        paddingRight: '8px',
-                                        marginBottom: (!matchesBelowUser && !largeTimeGapBelow && !hasLastUserTag) ? '8px' : '2px',
+                                        paddingLeft: belongsToUser ? '11px' : '10px',
+                                        paddingRight: belongsToUser ? '10px' : '11px',
+                                        marginBottom: (!matchesBelowUser && !largeTimeGapBelow && !hasLastUserTag) ? '15px' : '2px',
 
                                         wordWrap: 'break-word',
                                         fontSize: '12px',
-                                        borderTopRightRadius: (belongsToUser && matchesAboveUser && !largeTimeGapAbove) ? '5px' : '20px',
-                                        borderBottomRightRadius: (belongsToUser && matchesBelowUser && !largeTimeGapBelow) ? '5px' : '20px',
-                                        borderTopLeftRadius: (!belongsToUser && matchesAboveUser && !largeTimeGapAbove) ? '5px' : '20px',
-                                        borderBottomLeftRadius: (!belongsToUser && matchesBelowUser && !largeTimeGapBelow) ? '5px' : '20px',
+                                        borderTopRightRadius: (belongsToUser && matchesAboveUser && !largeTimeGapAbove) ? '7px' : '20px',
+                                        borderBottomRightRadius: (belongsToUser && matchesBelowUser && !largeTimeGapBelow) ? '7px' : '20px',
+                                        borderTopLeftRadius: (!belongsToUser && matchesAboveUser && !largeTimeGapAbove) ? '7px' : '20px',
+                                        borderBottomLeftRadius: (!belongsToUser && matchesBelowUser && !largeTimeGapBelow) ? '7px' : '20px',
                                         backgroundColor: belongsToUser ? '#0078FF' : '#e9e9e9',
                                         color: belongsToUser ? 'white' : 'black',
                                         ...ALLOW_SELECT
@@ -236,9 +235,8 @@ class ChatDisplay extends Component {
                                         style={{
                                             alignSelf: 'flex-end',
                                             marginRight: '7px',
-                                            marginBottom: '5px',
 
-                                            fontSize: '10px',
+                                            fontSize: '9px',
                                             color: '#919191',
                                             ...DISALLOW_SELECT
                                         }} 
@@ -333,7 +331,7 @@ class ChatDisplay extends Component {
         animateScroll.scrollToTop({
             containerId: 'message-display',
             delay: 0,
-            duration: 5000
+            duration: 300
         });
     }
 
