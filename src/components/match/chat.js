@@ -99,61 +99,56 @@ class ChatDisplay extends Component {
                     }}
                 >
 
-                    
-                    {/* message top */}
-                    {(this.state.messageCount >= MESSAGE_COUNT_LIMIT) && this.state.allowLoadMore ?
-                        <>
-
-                            {/* load more button */}
-                            <Button
-                                onClick={this._loadPastMessages}
-                                variant='outline-secondary'
-                                size='sm'
+                    {/* match info */}
+                    <div 
+                        style={{ 
+                            alignSelf: 'center',
+                            marginTop: '5px',
+                            marginBottom: '25px',
+                            textAlign: 'center'
+                        }}
+                    >
+                        {this.props.users.map(user =>
+                            <div
+                                key={user.name}
                                 style={{
-                                    alignSelf: 'center',
+                                    marginBottom: '4px',
 
-                                    height: '25px',
-                                    width: '70px',
-                                    marginTop: '5px',
-                                    marginBottom: '15px',
-
-                                    fontSize: '10px',
+                                    fontSize: isMobile ? '11px' : '12px',
+                                    color: '#919191',
                                     ...DISALLOW_SELECT
                                 }}
                             >
-                                Load More
-                            </Button> 
-                        </> :
-                        <div 
-                            style={{ 
+                                {getFormattedUserString(user)}
+                            </div>
+                        )}
+                    </div>
+                    
+                    {/* load more button */}
+                    {(this.state.messageCount >= MESSAGE_COUNT_LIMIT) && this.state.allowLoadMore &&
+                        <Button
+                            onClick={this._loadPastMessages}
+                            variant='outline-secondary'
+                            size='sm'
+                            style={{
                                 alignSelf: 'center',
-                                marginTop: '10px',
-                                marginBottom: '20px',
-                                textAlign: 'center'
+
+                                height: '25px',
+                                width: '70px',
+                                marginTop: '5px',
+                                marginBottom: '15px',
+
+                                fontSize: '10px',
+                                ...DISALLOW_SELECT
                             }}
                         >
-
-                                {/* users display */}
-                            {this.props.users.map(user =>
-                                <div
-                                    key={user.name}
-                                    style={{
-                                        marginBottom: '4px',
-
-                                        fontSize: isMobile ? '11px' : '12px',
-                                        color: '#919191',
-                                        ...DISALLOW_SELECT
-                                    }}
-                                >
-                                    {getFormattedUserString(user)}
-                                </div>
-                            )}
-                        </div>
+                            Load More
+                        </Button> 
                     }
 
                     {/* message data */}
                     {Boolean(this.state.messages.length) && this.state.messages.map((message, index) => {                                                 
-                        const belongsToUser = Boolean(message.name === this.props.user.displayName);
+                        const belongsToUser = Boolean(message.uid === this.props.user.uid);
                         const matchesAboveUser = Boolean((index > 0) && (message.name === this.state.messages[index - 1].name));
                         const matchesBelowUser = Boolean((index < (this.state.messageCount - 1)) && (message.name === this.state.messages[index + 1].name));
                         const largeTimeGapAbove = (index > 0) ? Boolean((message.timestamp.seconds - this.state.messages[index - 1].timestamp.seconds) >= 3600) : true;
@@ -189,7 +184,7 @@ class ChatDisplay extends Component {
                                 }
 
                                 {/* user tag */}
-                                {!belongsToUser && !matchesAboveUser && 
+                                {!belongsToUser && (!matchesAboveUser || largeTimeGapAbove) && 
                                     <div
                                         key={'u-' + message.id}
                                         style={{
@@ -216,16 +211,16 @@ class ChatDisplay extends Component {
 
                                         maxWidth: isMobile ? '235px' : '350px',
                                         padding: '5px',
-                                        paddingLeft: '12px',
-                                        paddingRight: '10px',
+                                        paddingLeft: '11px',
+                                        paddingRight: '8px',
                                         marginBottom: (!matchesBelowUser && !largeTimeGapBelow && !hasLastUserTag) ? '8px' : '2px',
 
                                         wordWrap: 'break-word',
                                         fontSize: '12px',
-                                        borderTopRightRadius: (belongsToUser && matchesAboveUser && !largeTimeGapAbove) ? '5px' : '15px',
-                                        borderBottomRightRadius: (belongsToUser && matchesBelowUser && !largeTimeGapBelow) ? '5px' : '15px',
-                                        borderTopLeftRadius: (!belongsToUser && matchesAboveUser && !largeTimeGapAbove) ? '5px' : '15px',
-                                        borderBottomLeftRadius: (!belongsToUser && matchesBelowUser && !largeTimeGapBelow) ? '5px' : '15px',
+                                        borderTopRightRadius: (belongsToUser && matchesAboveUser && !largeTimeGapAbove) ? '5px' : '20px',
+                                        borderBottomRightRadius: (belongsToUser && matchesBelowUser && !largeTimeGapBelow) ? '5px' : '20px',
+                                        borderTopLeftRadius: (!belongsToUser && matchesAboveUser && !largeTimeGapAbove) ? '5px' : '20px',
+                                        borderBottomLeftRadius: (!belongsToUser && matchesBelowUser && !largeTimeGapBelow) ? '5px' : '20px',
                                         backgroundColor: belongsToUser ? '#0078FF' : '#e9e9e9',
                                         color: belongsToUser ? 'white' : 'black',
                                         ...ALLOW_SELECT
@@ -380,13 +375,15 @@ class ChatDisplay extends Component {
                 messageCount: this.state.messageCount + 1,
                 messages: this.state.messages.concat({
                     id: messageId,
+                    uid: this.props.user.uid,
                     content: this.state.input,
-                    name: this.props.user.displayName,
+                    name: this.props.user.displayName.split(' ')[0],
                     timestamp: this.props.firebase.getFirebaseTimestampNow(),
                     status: 'Sent'
                 })
             });
         }).catch(err => {
+            console.log(err)
             this.props.setError('Error: Failed to send message. Please wait and try again.');
         });
     }
@@ -434,11 +431,16 @@ class ChatDisplay extends Component {
             MESSAGE_COUNT_LIMIT,
 
             // success callback (add message)
-            (type, id, message, bulkStart, bulkEnd) => {
+            (type, id, message, bulkStart, end) => {
                 if (bulkStart) this.props.setFetching(true);
-                else if (bulkEnd) this.props.setFetching(false);
+                else if (end) this.props.setFetching(false);
                 if ((type === 'added') || (type === 'modified'))
                     this._addMessage(id, message);
+            },
+
+            // no message callback
+            () => {
+                this.props.setFetching(false);
             },
 
             // failure callback
@@ -467,7 +469,7 @@ class ChatDisplay extends Component {
         }
 
         // add last user message
-        else if (message.name === this.props.user.displayName) {
+        else if (message.uid === this.props.user.uid) {
             this.setState({
                 lastUpdateLoadMore: false,
                 lastUserMessageId: id,

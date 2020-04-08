@@ -347,7 +347,7 @@ class AuthSurveyPage extends Component {
                     this._updateResponseValue(i, Number(user.surveyAnswers[i]));
                 }
             }
-            else this.setState({ name: this.props.user.displayName });
+            else this.setState({ name: this.props.user.displayName.split(' ')[0] });
         });
     }
 

@@ -150,25 +150,29 @@ class Firebase {
         });
     }
 
-    getMessages = (current, matchId, limit, onSuccess, onFailure) => {
+    getMessages = (current, matchId, limit, onSuccess, onNone, onFailure) => {
         const messagesRef = this.db.collection('matchings').doc(current)
             .collection('matches').doc(matchId).collection('messages');
 
         return messagesRef.orderBy('timestamp', 'desc').limit(limit).onSnapshot(snapshot => {
             const changes = snapshot.docChanges().reverse();
             const bulk = Boolean(changes.length > 10);
+            if (changes.length === 0) {
+                onNone(); return;
+            }
 
             changes.forEach((change, index) => {
                 if (change.doc.exists) {
                     const message = change.doc.data();
                     const bulkStart = bulk && (index === 0);
-                    const bulkEnd = bulk && (index === changes.length - 1);
+                    const end = (index === changes.length - 1);
+                    
                     if (message.timestamp) onSuccess(
                         change.type,
                         change.doc.id, 
                         message,
                         bulkStart,
-                        bulkEnd
+                        end
                     );
                 }
                 else onFailure();
@@ -183,7 +187,8 @@ class Firebase {
 
         return messageRef.set({
             id: messageId,
-            name: this.getUser().displayName,
+            uid: this.getUser().uid,
+            name: this.getUser().displayName.split(' ')[0],
             content: content,
             timestamp: app.firestore.FieldValue.serverTimestamp(),
         }).then(() => messageId);
