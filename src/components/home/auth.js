@@ -220,7 +220,7 @@ class AuthHomeDisplay extends Component {
                             <b>
                                 {this.state.signupCount ?
                                     this.state.signupCount.toLocaleString() :
-                                    '0'
+                                    ''
                                 }
                             </b>
                         </div>
@@ -237,7 +237,7 @@ class AuthHomeDisplay extends Component {
                             <b>
                                 {this.state.timeLeft ?
                                     formatTimeFromMs(this.state.timeLeft) :
-                                    '[Loading]'
+                                    ''
                                 }
                             </b>
                         </div>

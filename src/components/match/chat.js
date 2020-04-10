@@ -12,7 +12,7 @@ import {
     getFormattedUserString
 } from '../../util';
 
-const MESSAGE_COUNT_LIMIT = 10;
+const MESSAGE_COUNT_LIMIT = 50;
 
 const ALLOW_SELECT = {
     cursor: 'text',
@@ -100,11 +100,14 @@ class ChatDisplay extends Component {
                 >
 
                     {/* match info */}
-                    <div 
+                    <div
                         style={{ 
                             alignSelf: 'center',
+                            flexShrink: 0,
+                            
                             marginTop: '5px',
                             marginBottom: '15px',
+
                             textAlign: 'center'
                         }}
                     >
@@ -132,14 +135,15 @@ class ChatDisplay extends Component {
                             size='sm'
                             style={{
                                 alignSelf: 'center',
+                                flexShrink: 0,
 
                                 height: '25px',
                                 width: '70px',
                                 marginTop: '5px',
                                 marginBottom: '15px',
 
+                                cursor: 'pointer',
                                 fontSize: '10px',
-                                ...DISALLOW_SELECT
                             }}
                         >
                             Load More
@@ -408,7 +412,11 @@ class ChatDisplay extends Component {
                             oldestMessage: (message.timestamp.seconds < this.state.oldestMessage.seconds) ? message.timestamp : this.state.oldestMessage,
                             messageCount: this.state.messageCount + 1,
                             messages: [message].concat(this.state.messages)
-                        }, () => { this.props.setFetching(false); });
+                        }, () => { 
+                            if (messages.length < MESSAGE_COUNT_LIMIT)
+                                this.setState({ allowLoadMore: false });
+                            this.props.setFetching(false);
+                        });
                     });
                 }
                 else {

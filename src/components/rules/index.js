@@ -34,7 +34,7 @@ class RulesPage extends Component {
                         flexShrink: 0,
 
                         width: '360px',
-                        height: '285px',
+                        height: '295px',
                         padding: '15px',
                         marginBottom: '25px',
 
@@ -55,9 +55,22 @@ class RulesPage extends Component {
 
                     The world is isolated, struggling, and in desperate need of coming together. Maybe, despite the thousands of miles between us, we’ll find that we’re not so different after all.
 
-                    I created the Global Matching Project to take a stab at this problem — to bring together like-minded people from all over the globe and form meaningful connections across borders. I invite you to join: to talk, to bond, to joke, and to lift each other out of isolation and struggle.
+                    I created the Global Matching Project to take a stab at this problem — to bring together like-minded people from all over the globe and form meaningful connections across borders.
 
                     The more people that join, the better the algorithm will perform, and the closer the connections will be.
+                
+                    <Button
+                        onClick={this._goToContact}
+                        size='sm'
+                        variant='secondary'
+                        style={{
+                            alignSelf: 'center',
+                            width: '210px',
+                            marginTop: '10px'
+                        }}
+                    >
+                        Contact Us
+                    </Button>
                 </div>
 
                 {/* bottom console */}
@@ -69,7 +82,7 @@ class RulesPage extends Component {
                         flexShrink: 0,
 
                         width: '360px',
-                        height: '340px',
+                        height: '330px',
                         padding: '15px',
 
                         fontSize: '13px',
@@ -89,11 +102,11 @@ class RulesPage extends Component {
                     </div>
 
                     <div>
-                        <b>Step 1: </b>Everyone fills in a survey with a bunch of interesting questions.
+                        <b>Step 1: </b>Everyone fills in a survey with a bunch of interesting questions. Spread the word!
                     </div>
 
                     <div>
-                        <b>Step 2: </b>We run an algorithm that places you in a group with the four most similar people in the world.
+                        <b>Step 2: </b>Our algorithm places you in a chatroom with the three most compatible people in the world.
                     </div> 
 
                     <div>
@@ -119,6 +132,10 @@ class RulesPage extends Component {
                 </div>
             </div>
         );
+    }
+
+    _goToContact = () => {
+        window.location.href = 'mailto:adlangshur@gmail.com';
     }
 }
 
