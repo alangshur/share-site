@@ -84,7 +84,7 @@ class AuthHomeDisplay extends Component {
                         style={{
                             width: '115px',
                             height: '115px',
-                            marginBottom: '15px',
+                            marginBottom: '10px',
 
                             opacity: '0.85'
                         }}
@@ -94,7 +94,7 @@ class AuthHomeDisplay extends Component {
                     <div
                         style={{
                             width: '165px',
-                            marginBottom: isMobile ? '40px' : '65px',
+                            marginBottom: isMobile ? '25px' : '60px',
 
                             lineHeight: '22px',
                             letterSpacing: '1px',
@@ -174,6 +174,32 @@ class AuthHomeDisplay extends Component {
                         </Button>
                     }
 
+                    {/* note console */}
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0,
+
+                            width: '325px',
+                            height: '50px',
+                            marginBottom: '25px',
+                            padding: '10px',
+
+                            textAlign: 'center',
+                            fontStyle: 'italic',
+                            fontSize: '11px',
+                            color: '#36454F',
+                            borderRadius: '5px',
+                            backgroundColor: '#f9f9f9',
+                            boxShadow: '0 7px 14px 0 rgba(60, 66, 87, 0.07), 0 3px 6px 0 rgba(0, 0, 0, 0.07)'
+                        }}
+                    >
+                        The matching algorithm works better with more signups. Make everyone's matches better by sharing with friends! 
+                    </div>
+
                     {/* top console */}
                     <div
                         style={{
@@ -233,7 +259,7 @@ class AuthHomeDisplay extends Component {
                             }}
                         >
 
-                            Time to Join:&nbsp;
+                            Time Left:&nbsp;
                             <b>
                                 {this.state.timeLeft ?
                                     formatTimeFromMs(this.state.timeLeft) :

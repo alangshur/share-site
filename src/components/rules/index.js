@@ -34,7 +34,7 @@ class RulesPage extends Component {
                         flexShrink: 0,
 
                         width: '360px',
-                        height: '295px',
+                        height: '290px',
                         padding: '15px',
                         marginBottom: '25px',
 
@@ -106,7 +106,7 @@ class RulesPage extends Component {
                     </div>
 
                     <div>
-                        <b>Step 2: </b>Our algorithm places you in a chatroom with the three most compatible people in the world.
+                        <b>Step 2: </b>On Friday, our algorithm places you in a chatroom with the three most compatible people in the world.
                     </div> 
 
                     <div>
